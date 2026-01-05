@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мое Telegram Приложение</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🎮 Мое Mini App</h1>
+            <p class="subtitle">Добро пожаловать в Telegram приложение!</p>
+        </header>
+
+        <div class="user-info card">
+            <h2>👤 Информация о пользователе</h2>
+            <div id="user-data">Загрузка...</div>
+        </div>
+
+        <div class="content">
+            <div class="card">
+                <h3>📝 Быстрые действия</h3>
+                <div class="buttons">
+                    <button id="btn-alert" class="btn btn-primary">Показать уведомление</button>
+                    <button id="btn-theme" class="btn btn-secondary">Сменить тему</button>
+                    <button id="btn-haptic" class="btn btn-warning">Вибрация</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>🎯 Счетчик</h3>
+                <div class="counter">
+                    <span id="counter-value">0</span>
+                    <div class="counter-buttons">
+                        <button id="btn-decrease" class="btn btn-outline">-</button>
+                        <button id="btn-increase" class="btn btn-outline">+</button>
+                        <button id="btn-reset" class="btn btn-danger">Сброс</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>✉️ Отправить сообщение</h3>
+                <div class="message-form">
+                    <input type="text" id="message-input" placeholder="Введите сообщение..." class="input">
+                    <button id="btn-send" class="btn btn-success">Отправить в Telegram</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>🎨 Цветовая схема</h3>
+                <div class="theme-info">
+                    <p>Текущая тема: <span id="theme-type">загрузка...</span></p>
+                    <div class="color-palette">
+                        <div class="color-box" id="bg-color"></div>
+                        <div class="color-box" id="text-color"></div>
+                        <div class="color-box" id="hint-color"></div>
+                        <div class="color-box" id="link-color"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>Это приложение работает внутри Telegram</p>
+            <button id="btn-close" class="btn btn-secondary">Закрыть приложение</button>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
