@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Казино "Ракетка" - Telegram Mini App</title>
+    <title>Казино "Ракетка" - Депозит по промокодам</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Telegram Web App SDK -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -73,41 +73,96 @@
             line-height: 1.3;
         }
         
-        /* Информация о пользователе */
-        .user-info {
+        /* Профиль пользователя - расширенный */
+        .profile-card {
             background: rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 12px;
+            border-radius: 15px;
+            padding: 15px;
             margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
             border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
         
-        .user-avatar {
-            width: 50px;
-            height: 50px;
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .profile-avatar {
+            width: 70px;
+            height: 70px;
             border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid #ff9f1a;
+            position: relative;
+        }
+        
+        .avatar-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .avatar-placeholder {
+            width: 100%;
+            height: 100%;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             font-weight: bold;
         }
         
-        .user-details {
+        .profile-info {
             flex: 1;
         }
         
-        .user-name {
+        .profile-name {
             font-weight: bold;
-            font-size: 1rem;
-            margin-bottom: 4px;
+            font-size: 1.2rem;
+            margin-bottom: 5px;
         }
         
-        .user-id {
+        .profile-id {
+            font-size: 0.9rem;
+            color: #aaa;
+            margin-bottom: 5px;
+        }
+        
+        .profile-status {
+            display: inline-block;
+            background: rgba(76, 209, 55, 0.2);
+            color: #4cd137;
+            padding: 3px 8px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+        
+        .profile-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .stat-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #ff9f1a;
+            margin-bottom: 3px;
+        }
+        
+        .stat-label {
             font-size: 0.8rem;
             color: #aaa;
         }
@@ -306,6 +361,11 @@
             color: white;
         }
         
+        .deposit-btn {
+            background: linear-gradient(to right, #4cd137, #2ecc71);
+            color: white;
+        }
+        
         /* Нижнее меню навигации */
         .bottom-nav {
             position: fixed;
@@ -393,6 +453,147 @@
             color: #e84118;
         }
         
+        /* Раздел пополнения баланса (депозит) */
+        .deposit-section {
+            background: rgba(26, 26, 46, 0.9);
+            border-radius: 15px;
+            padding: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            width: 100%;
+            margin-bottom: 15px;
+            display: none; /* Скрыто по умолчанию */
+        }
+        
+        .deposit-section.active {
+            display: block;
+        }
+        
+        .deposit-title {
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            color: #ff9f1a;
+        }
+        
+        .promo-input-container {
+            margin: 20px 0;
+        }
+        
+        .promo-input-label {
+            display: block;
+            margin-bottom: 10px;
+            color: #ff9f1a;
+            font-size: 1rem;
+            text-align: center;
+        }
+        
+        .promo-input-wrapper {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .promo-input {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid #3c40c6;
+            border-radius: 10px;
+            padding: 12px 15px;
+            color: white;
+            font-size: 1.1rem;
+            text-align: center;
+            outline: none;
+            text-transform: uppercase;
+        }
+        
+        .promo-input:focus {
+            border-color: #ff9f1a;
+            box-shadow: 0 0 10px rgba(255, 159, 26, 0.5);
+        }
+        
+        .apply-promo-btn {
+            background: linear-gradient(to right, #4cd137, #2ecc71);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 0 20px;
+            font-weight: bold;
+            cursor: pointer;
+            min-width: 80px;
+        }
+        
+        .promo-codes {
+            margin-top: 20px;
+        }
+        
+        .promo-codes-title {
+            text-align: center;
+            margin-bottom: 10px;
+            color: #ff9f1a;
+            font-size: 1rem;
+        }
+        
+        .promo-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        
+        .promo-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .promo-code {
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: #ff9f1a;
+            margin-bottom: 5px;
+        }
+        
+        .promo-reward {
+            font-size: 0.9rem;
+            color: #4cd137;
+        }
+        
+        .promo-used {
+            font-size: 0.8rem;
+            color: #e84118;
+            margin-top: 5px;
+        }
+        
+        /* История депозитов */
+        .deposit-history {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+        
+        .deposit-history-title {
+            margin-bottom: 10px;
+            color: #ff9f1a;
+            font-size: 1rem;
+        }
+        
+        .deposit-item {
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.85rem;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .deposit-success {
+            color: #4cd137;
+        }
+        
         /* Помощь и правила */
         .help {
             margin-top: 20px;
@@ -472,12 +673,22 @@
             50% { box-shadow: 0 0 20px #4cd137; }
         }
         
+        @keyframes success {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
         .reel.spinning {
             animation: spin 0.1s linear infinite;
         }
         
         .reel.win {
             animation: win-glow 0.5s 3;
+        }
+        
+        .success-animation {
+            animation: success 0.5s ease-in-out;
         }
         
         /* Адаптация для планшетов */
@@ -499,6 +710,10 @@
             
             .rules {
                 grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .promo-list {
+                grid-template-columns: repeat(3, 1fr);
             }
         }
         
@@ -541,16 +756,19 @@
         }
         
         /* Скрыть полосу прокрутки в некоторых браузерах */
-        .history::-webkit-scrollbar {
+        .history::-webkit-scrollbar,
+        .deposit-history::-webkit-scrollbar {
             width: 4px;
         }
         
-        .history::-webkit-scrollbar-track {
+        .history::-webkit-scrollbar-track,
+        .deposit-history::-webkit-scrollbar-track {
             background: rgba(255, 255, 255, 0.1);
             border-radius: 2px;
         }
         
-        .history::-webkit-scrollbar-thumb {
+        .history::-webkit-scrollbar-thumb,
+        .deposit-history::-webkit-scrollbar-thumb {
             background: #ff9f1a;
             border-radius: 2px;
         }
@@ -564,11 +782,56 @@
         .fade-in {
             animation: fadeIn 0.3s ease-out;
         }
+        
+        /* Уведомление */
+        .notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(26, 26, 46, 0.95);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 10px;
+            border-left: 4px solid #4cd137;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            z-index: 1001;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            max-width: 90%;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: none;
+        }
+        
+        .notification.show {
+            display: flex;
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        .notification.error {
+            border-left-color: #e84118;
+        }
+        
+        .notification.warning {
+            border-left-color: #ff9f1a;
+        }
+        
+        .notification-icon {
+            font-size: 1.2rem;
+        }
     </style>
 </head>
 <body>
     <!-- Фон для Telegram -->
     <div class="tg-background"></div>
+    
+    <!-- Уведомление -->
+    <div class="notification" id="notification">
+        <div class="notification-icon" id="notificationIcon">✅</div>
+        <div id="notificationText">Уведомление</div>
+    </div>
     
     <div class="container">
         <header>
@@ -576,15 +839,36 @@
                 <div class="logo"><i class="fas fa-rocket"></i></div>
                 <h1>Казино "Ракетка"</h1>
             </div>
-            <p class="subtitle">Telegram Mini App • Баланс синхронизируется</p>
+            <p class="subtitle">Депозит по промокодам • Ваш профиль</p>
         </header>
         
-        <!-- Информация о пользователе Telegram -->
-        <div class="user-info" id="userInfo">
-            <div class="user-avatar" id="userAvatar">U</div>
-            <div class="user-details">
-                <div class="user-name" id="userName">Загрузка...</div>
-                <div class="user-id">ID: <span id="userId">000000</span></div>
+        <!-- Профиль пользователя -->
+        <div class="profile-card" id="profileCard">
+            <div class="profile-header">
+                <div class="profile-avatar" id="profileAvatar">
+                    <div class="avatar-placeholder" id="avatarPlaceholder">U</div>
+                    <img src="" alt="" class="avatar-image" id="avatarImage" style="display: none;">
+                </div>
+                <div class="profile-info">
+                    <div class="profile-name" id="userName">Загрузка...</div>
+                    <div class="profile-id">ID: <span id="userId">000000</span></div>
+                    <div class="profile-status">Онлайн</div>
+                </div>
+            </div>
+            
+            <div class="profile-stats">
+                <div class="stat-item">
+                    <div class="stat-value" id="balanceValue">1000</div>
+                    <div class="stat-label">Баланс</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="totalWins">0</div>
+                    <div class="stat-label">Победы</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="totalGames">0</div>
+                    <div class="stat-label">Игры</div>
+                </div>
             </div>
         </div>
         
@@ -621,7 +905,7 @@
             <div class="balance-panel">
                 <div class="balance">
                     <span><i class="fas fa-wallet"></i> Баланс:</span>
-                    <span class="value" id="balanceValue">1000</span>
+                    <span class="value" id="balanceDisplay">1000</span>
                 </div>
                 
                 <div class="bet">
@@ -658,6 +942,31 @@
             </div>
         </div>
         
+        <!-- Раздел пополнения баланса (депозит) -->
+        <div class="deposit-section" id="depositSection">
+            <h2 class="deposit-title"><i class="fas fa-coins"></i> Пополнение баланса</h2>
+            
+            <div class="promo-input-container">
+                <label class="promo-input-label">Введите промокод для пополнения баланса:</label>
+                <div class="promo-input-wrapper">
+                    <input type="text" class="promo-input" id="promoInput" placeholder="ROCKET2024" maxlength="20">
+                    <button class="apply-promo-btn" id="applyPromoBtn">Применить</button>
+                </div>
+            </div>
+            
+            <div class="promo-codes">
+                <div class="promo-codes-title">Доступные промокоды:</div>
+                <div class="promo-list" id="promoList">
+                    <!-- Промокоды будут загружены через JavaScript -->
+                </div>
+            </div>
+            
+            <div class="deposit-history">
+                <div class="deposit-history-title"><i class="fas fa-history"></i> История пополнений</div>
+                <div id="depositHistoryList"></div>
+            </div>
+        </div>
+        
         <!-- Помощь и правила (скрыто по умолчанию) -->
         <div class="help" id="helpSection">
             <h3><i class="fas fa-info-circle"></i> Правила игры</h3>
@@ -682,10 +991,10 @@
                 </div>
             </div>
             
-            <h3 style="margin-top: 20px;"><i class="fas fa-sync-alt"></i> Синхронизация</h3>
+            <h3 style="margin-top: 20px;"><i class="fas fa-gift"></i> Промокоды</h3>
             <div class="rule">
-                Ваш баланс автоматически синхронизируется через Telegram. 
-                Вы можете играть с любого устройства, и ваш прогресс будет сохранен.
+                Для пополнения баланса используйте промокоды. Вводите их в разделе "Пополнение". 
+                Каждый промокод можно использовать только один раз.
             </div>
         </div>
         
@@ -694,15 +1003,15 @@
             <h3><i class="fas fa-chart-bar"></i> Статистика</h3>
             <div class="stat-item">
                 <span>Всего сыграно игр:</span>
-                <span id="totalGames">0</span>
+                <span id="totalGamesStat">0</span>
             </div>
             <div class="stat-item">
                 <span>Побед:</span>
-                <span id="totalWins">0</span>
+                <span id="totalWinsStat">0</span>
             </div>
             <div class="stat-item">
                 <span>Проигрышей:</span>
-                <span id="totalLosses">0</span>
+                <span id="totalLossesStat">0</span>
             </div>
             <div class="stat-item">
                 <span>Общий выигрыш:</span>
@@ -716,6 +1025,10 @@
                 <span>Процент побед:</span>
                 <span id="winRate">0%</span>
             </div>
+            <div class="stat-item">
+                <span>Использовано промокодов:</span>
+                <span id="usedPromoCodes">0</span>
+            </div>
             
             <button class="btn spin-btn" id="resetStatsBtn" style="margin-top: 15px;">
                 <i class="fas fa-redo"></i> Сбросить статистику
@@ -727,6 +1040,10 @@
             <a href="#" class="nav-item active" data-section="game">
                 <div class="nav-icon"><i class="fas fa-gamepad"></i></div>
                 <div>Игра</div>
+            </a>
+            <a href="#" class="nav-item" data-section="deposit">
+                <div class="nav-icon"><i class="fas fa-coins"></i></div>
+                <div>Пополнение</div>
             </a>
             <a href="#" class="nav-item" data-section="stats">
                 <div class="nav-icon"><i class="fas fa-chart-bar"></i></div>
@@ -747,6 +1064,7 @@
         let isSpinning = false;
         let autoSpin = false;
         let history = [];
+        let depositHistory = [];
         let userData = null;
         
         // Статистика
@@ -755,14 +1073,29 @@
             totalWins: 0,
             totalLosses: 0,
             totalWinAmount: 0,
-            maxWin: 0
+            maxWin: 0,
+            usedPromoCodes: 0
         };
+        
+        // Промокоды (в реальном приложении должны приходить с сервера)
+        const availablePromoCodes = [
+            { code: "ROCKET100", amount: 100, description: "Бонус новичка" },
+            { code: "CASINO200", amount: 200, description: "Промо-бонус" },
+            { code: "LUCKY500", amount: 500, description: "Удача" },
+            { code: "BIGWIN1000", amount: 1000, description: "Крупный выигрыш" },
+            { code: "JACKPOT2000", amount: 2000, description: "Джекпот" },
+            { code: "VIP5000", amount: 5000, description: "VIP статус" }
+        ];
+        
+        // Использованные промокоды (храним в localStorage)
+        let usedPromoCodes = [];
         
         // Символы для барабанов
         const symbols = ['🍒', '⭐', '🚀', '💎', '👑', '🔔', '🍋', '7️⃣'];
         
         // Элементы DOM
         const balanceElement = document.getElementById('balanceValue');
+        const balanceDisplay = document.getElementById('balanceDisplay');
         const betElement = document.getElementById('betValue');
         const winElement = document.getElementById('winValue');
         const spinBtn = document.getElementById('spinBtn');
@@ -777,33 +1110,77 @@
             document.getElementById('reel3')
         ];
         
-        // Элементы Telegram
-        const userInfo = document.getElementById('userInfo');
-        const userAvatar = document.getElementById('userAvatar');
+        // Элементы профиля
+        const profileCard = document.getElementById('profileCard');
         const userName = document.getElementById('userName');
         const userId = document.getElementById('userId');
+        const avatarPlaceholder = document.getElementById('avatarPlaceholder');
+        const avatarImage = document.getElementById('avatarImage');
+        
+        // Элементы статистики в профиле
+        const totalGamesElement = document.getElementById('totalGames');
+        const totalWinsElement = document.getElementById('totalWins');
+        
+        // Элементы пополнения
+        const promoInput = document.getElementById('promoInput');
+        const applyPromoBtn = document.getElementById('applyPromoBtn');
+        const promoList = document.getElementById('promoList');
+        const depositHistoryList = document.getElementById('depositHistoryList');
         
         // Элементы навигации
         const gameSection = document.getElementById('gameSection');
+        const depositSection = document.getElementById('depositSection');
         const helpSection = document.getElementById('helpSection');
         const statsSection = document.getElementById('statsSection');
         const navItems = document.querySelectorAll('.nav-item');
         
         // Элементы статистики
-        const totalGamesElement = document.getElementById('totalGames');
-        const totalWinsElement = document.getElementById('totalWins');
-        const totalLossesElement = document.getElementById('totalLosses');
+        const totalGamesStat = document.getElementById('totalGamesStat');
+        const totalWinsStat = document.getElementById('totalWinsStat');
+        const totalLossesStat = document.getElementById('totalLossesStat');
         const totalWinAmountElement = document.getElementById('totalWinAmount');
         const maxWinElement = document.getElementById('maxWin');
         const winRateElement = document.getElementById('winRate');
+        const usedPromoCodesElement = document.getElementById('usedPromoCodes');
         const resetStatsBtn = document.getElementById('resetStatsBtn');
+        
+        // Уведомление
+        const notification = document.getElementById('notification');
+        const notificationIcon = document.getElementById('notificationIcon');
+        const notificationText = document.getElementById('notificationText');
         
         // Ключи для localStorage
         const STORAGE_KEYS = {
             BALANCE: 'rocket_casino_balance',
             STATS: 'rocket_casino_stats',
-            HISTORY: 'rocket_casino_history'
+            HISTORY: 'rocket_casino_history',
+            DEPOSIT_HISTORY: 'rocket_casino_deposit_history',
+            USED_PROMOCODES: 'rocket_casino_used_promocodes'
         };
+        
+        // Показать уведомление
+        function showNotification(message, type = 'success') {
+            notificationText.textContent = message;
+            
+            if (type === 'error') {
+                notificationIcon.textContent = '❌';
+                notification.classList.remove('warning');
+                notification.classList.add('error');
+            } else if (type === 'warning') {
+                notificationIcon.textContent = '⚠️';
+                notification.classList.remove('error');
+                notification.classList.add('warning');
+            } else {
+                notificationIcon.textContent = '✅';
+                notification.classList.remove('error', 'warning');
+            }
+            
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
         
         // Инициализация Telegram Web App
         function initTelegramApp() {
@@ -821,27 +1198,39 @@
                     userData = user;
                     
                     // Отображаем информацию о пользователе
-                    userName.textContent = `${user.first_name || ''} ${user.last_name || ''}`.trim() || 'Анонимный игрок';
+                    const fullName = `${user.first_name || ''} ${user.last_name || ''}`.trim();
+                    userName.textContent = fullName || 'Анонимный игрок';
                     userId.textContent = user.id || '000000';
                     
                     // Устанавливаем аватар
-                    if (user.username) {
-                        userAvatar.textContent = user.username.charAt(0).toUpperCase();
-                    } else if (user.first_name) {
-                        userAvatar.textContent = user.first_name.charAt(0).toUpperCase();
+                    if (user.photo_url) {
+                        avatarImage.src = user.photo_url;
+                        avatarImage.style.display = 'block';
+                        avatarPlaceholder.style.display = 'none';
+                    } else {
+                        // Используем первую букву имени или никнейма
+                        let initial = 'U';
+                        if (user.username) {
+                            initial = user.username.charAt(0).toUpperCase();
+                        } else if (user.first_name) {
+                            initial = user.first_name.charAt(0).toUpperCase();
+                        }
+                        avatarPlaceholder.textContent = initial;
                     }
                     
                     // Загружаем данные пользователя из localStorage с привязкой к ID
                     loadUserData(user.id);
                     
                     // Показываем информацию о пользователе
-                    userInfo.classList.add('fade-in');
+                    profileCard.classList.add('fade-in');
                     
                     // Настраиваем тему Telegram
                     applyTelegramTheme();
                 } else {
                     // Если данные пользователя недоступны, используем локальное хранилище
                     console.log('Данные пользователя недоступны, используем локальное хранилище');
+                    userName.textContent = 'Локальный игрок';
+                    userId.textContent = 'local';
                     loadUserData('local_user');
                 }
                 
@@ -857,6 +1246,7 @@
                 console.log('Приложение запущено не в Telegram');
                 userName.textContent = 'Локальный игрок';
                 userId.textContent = 'local';
+                avatarPlaceholder.textContent = 'L';
                 loadUserData('local_user');
             }
         }
@@ -872,8 +1262,6 @@
             // Применяем цвета темы
             document.querySelector('.tg-background').style.backgroundColor = bgColor;
             document.body.style.color = textColor;
-            
-            // Также можно применить другие параметры темы по необходимости
         }
         
         // Загрузка данных пользователя
@@ -890,14 +1278,28 @@
                 const savedStats = localStorage.getItem(`${STORAGE_KEYS.STATS}_${userId}`);
                 if (savedStats) {
                     stats = JSON.parse(savedStats);
-                    updateStats();
+                    updateProfileStats();
+                    updateStatsSection();
                 }
                 
-                // Загружаем историю
+                // Загружаем историю игр
                 const savedHistory = localStorage.getItem(`${STORAGE_KEYS.HISTORY}_${userId}`);
                 if (savedHistory) {
                     history = JSON.parse(savedHistory);
                     updateHistory();
+                }
+                
+                // Загружаем историю пополнений
+                const savedDepositHistory = localStorage.getItem(`${STORAGE_KEYS.DEPOSIT_HISTORY}_${userId}`);
+                if (savedDepositHistory) {
+                    depositHistory = JSON.parse(savedDepositHistory);
+                    updateDepositHistory();
+                }
+                
+                // Загружаем использованные промокоды
+                const savedUsedPromoCodes = localStorage.getItem(`${STORAGE_KEYS.USED_PROMOCODES}_${userId}`);
+                if (savedUsedPromoCodes) {
+                    usedPromoCodes = JSON.parse(savedUsedPromoCodes);
                 }
                 
                 console.log('Данные пользователя загружены');
@@ -915,9 +1317,16 @@
                 // Сохраняем статистику
                 localStorage.setItem(`${STORAGE_KEYS.STATS}_${userId}`, JSON.stringify(stats));
                 
-                // Сохраняем историю (только последние 20 записей)
+                // Сохраняем историю игр (только последние 20 записей)
                 const historyToSave = history.slice(0, 20);
                 localStorage.setItem(`${STORAGE_KEYS.HISTORY}_${userId}`, JSON.stringify(historyToSave));
+                
+                // Сохраняем историю пополнений (только последние 10 записей)
+                const depositHistoryToSave = depositHistory.slice(0, 10);
+                localStorage.setItem(`${STORAGE_KEYS.DEPOSIT_HISTORY}_${userId}`, JSON.stringify(depositHistoryToSave));
+                
+                // Сохраняем использованные промокоды
+                localStorage.setItem(`${STORAGE_KEYS.USED_PROMOCODES}_${userId}`, JSON.stringify(usedPromoCodes));
                 
                 console.log('Данные пользователя сохранены');
             } catch (error) {
@@ -928,6 +1337,7 @@
         // Обновление баланса
         function updateBalance() {
             balanceElement.textContent = balance;
+            balanceDisplay.textContent = balance;
             
             // Обновляем максимальную ставку в поле ввода
             betInput.max = balance;
@@ -938,6 +1348,26 @@
             } else {
                 saveUserData('local_user');
             }
+        }
+        
+        // Обновление статистики в профиле
+        function updateProfileStats() {
+            totalGamesElement.textContent = stats.totalGames;
+            totalWinsElement.textContent = stats.totalWins;
+        }
+        
+        // Обновление раздела статистики
+        function updateStatsSection() {
+            totalGamesStat.textContent = stats.totalGames;
+            totalWinsStat.textContent = stats.totalWins;
+            totalLossesStat.textContent = stats.totalLosses;
+            totalWinAmountElement.textContent = stats.totalWinAmount;
+            maxWinElement.textContent = stats.maxWin;
+            usedPromoCodesElement.textContent = stats.usedPromoCodes;
+            
+            // Рассчитываем процент побед
+            const winRate = stats.totalGames > 0 ? Math.round((stats.totalWins / stats.totalGames) * 100) : 0;
+            winRateElement.textContent = `${winRate}%`;
         }
         
         // Обновление ставки
@@ -955,27 +1385,7 @@
             });
         }
         
-        // Обновление статистики
-        function updateStats() {
-            totalGamesElement.textContent = stats.totalGames;
-            totalWinsElement.textContent = stats.totalWins;
-            totalLossesElement.textContent = stats.totalLosses;
-            totalWinAmountElement.textContent = stats.totalWinAmount;
-            maxWinElement.textContent = stats.maxWin;
-            
-            // Рассчитываем процент побед
-            const winRate = stats.totalGames > 0 ? Math.round((stats.totalWins / stats.totalGames) * 100) : 0;
-            winRateElement.textContent = `${winRate}%`;
-            
-            // Сохраняем статистику
-            if (userData && userData.id) {
-                saveUserData(userData.id);
-            } else {
-                saveUserData('local_user');
-            }
-        }
-        
-        // Обновление истории
+        // Обновление истории игр
         function updateHistory() {
             historyList.innerHTML = '';
             
@@ -999,6 +1409,53 @@
                 `;
                 
                 historyList.appendChild(historyElement);
+            });
+        }
+        
+        // Обновление истории пополнений
+        function updateDepositHistory() {
+            depositHistoryList.innerHTML = '';
+            
+            if (depositHistory.length === 0) {
+                depositHistoryList.innerHTML = '<div style="text-align: center; color: #aaa; padding: 10px;">История пополнений пуста</div>';
+                return;
+            }
+            
+            depositHistory.forEach(item => {
+                const depositElement = document.createElement('div');
+                depositElement.className = 'deposit-item deposit-success';
+                
+                const time = item.time || '--:--';
+                const promoCode = item.promoCode || '---';
+                const amount = item.amount || 0;
+                
+                depositElement.innerHTML = `
+                    <span>${time}</span>
+                    <span>${promoCode}</span>
+                    <span>+${amount}</span>
+                `;
+                
+                depositHistoryList.appendChild(depositElement);
+            });
+        }
+        
+        // Обновление списка промокодов
+        function updatePromoCodesList() {
+            promoList.innerHTML = '';
+            
+            availablePromoCodes.forEach(promo => {
+                const promoElement = document.createElement('div');
+                promoElement.className = 'promo-item';
+                
+                const isUsed = usedPromoCodes.includes(promo.code);
+                
+                promoElement.innerHTML = `
+                    <div class="promo-code">${promo.code}</div>
+                    <div class="promo-reward">+${promo.amount} кредитов</div>
+                    ${isUsed ? '<div class="promo-used">Использован</div>' : ''}
+                `;
+                
+                promoList.appendChild(promoElement);
             });
         }
         
@@ -1072,6 +1529,7 @@
             if (balance < currentBet) {
                 gameMessage.textContent = "Недостаточно средств!";
                 gameMessage.style.color = "#ff3838";
+                showNotification("Недостаточно средств на балансе!", "error");
                 return;
             }
             
@@ -1149,6 +1607,9 @@
                     reel.classList.add('win');
                 });
                 
+                // Показываем уведомление о выигрыше
+                showNotification(`Поздравляем! Вы выиграли ${winAmount} кредитов!`);
+                
                 setTimeout(() => {
                     reels.forEach(reel => {
                         reel.classList.remove('win');
@@ -1163,7 +1624,8 @@
             
             // Обновление интерфейса
             winElement.textContent = lastWin;
-            updateStats();
+            updateProfileStats();
+            updateStatsSection();
             
             // Добавление в историю
             const historyItem = {
@@ -1188,6 +1650,7 @@
                 toggleAutoSpin();
                 gameMessage.textContent = "Автоспин остановлен: недостаточно средств!";
                 gameMessage.style.color = "#ff3838";
+                showNotification("Автоспин остановлен: недостаточно средств!", "warning");
             }
         }
         
@@ -1238,16 +1701,76 @@
             updateBet();
         }
         
+        // Активация промокода
+        function activatePromoCode() {
+            const promoCode = promoInput.value.trim().toUpperCase();
+            
+            if (!promoCode) {
+                showNotification("Введите промокод!", "warning");
+                return;
+            }
+            
+            // Проверяем, использовался ли уже этот промокод
+            if (usedPromoCodes.includes(promoCode)) {
+                showNotification("Этот промокод уже использован!", "error");
+                return;
+            }
+            
+            // Ищем промокод в списке доступных
+            const promo = availablePromoCodes.find(p => p.code === promoCode);
+            
+            if (!promo) {
+                showNotification("Неверный промокод!", "error");
+                return;
+            }
+            
+            // Активируем промокод
+            balance += promo.amount;
+            usedPromoCodes.push(promoCode);
+            stats.usedPromoCodes++;
+            
+            // Добавляем в историю пополнений
+            const depositItem = {
+                promoCode: promoCode,
+                amount: promo.amount,
+                time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+            };
+            
+            depositHistory.unshift(depositItem);
+            if (depositHistory.length > 10) depositHistory.pop();
+            
+            // Обновляем интерфейс
+            updateBalance();
+            updateStatsSection();
+            updateDepositHistory();
+            updatePromoCodesList();
+            
+            // Показываем уведомление об успехе
+            showNotification(`Промокод активирован! +${promo.amount} кредитов`, "success");
+            
+            // Очищаем поле ввода
+            promoInput.value = "";
+            
+            // Анимация успеха
+            profileCard.classList.add('success-animation');
+            setTimeout(() => {
+                profileCard.classList.remove('success-animation');
+            }, 500);
+        }
+        
         // Переключение между разделами
         function switchSection(section) {
             // Скрываем все разделы
             gameSection.style.display = 'none';
+            depositSection.classList.remove('active');
             helpSection.classList.remove('active');
             statsSection.classList.remove('active');
             
             // Показываем выбранный раздел
             if (section === 'game') {
                 gameSection.style.display = 'block';
+            } else if (section === 'deposit') {
+                depositSection.classList.add('active');
             } else if (section === 'help') {
                 helpSection.classList.add('active');
             } else if (section === 'stats') {
@@ -1272,12 +1795,34 @@
                     totalWins: 0,
                     totalLosses: 0,
                     totalWinAmount: 0,
-                    maxWin: 0
+                    maxWin: 0,
+                    usedPromoCodes: 0
                 };
                 
-                updateStats();
-                alert("Статистика сброшена!");
+                // Также очищаем историю игр
+                history = [];
+                depositHistory = [];
+                usedPromoCodes = [];
+                
+                // Обновляем интерфейс
+                updateProfileStats();
+                updateStatsSection();
+                updateHistory();
+                updateDepositHistory();
+                updatePromoCodesList();
+                
+                showNotification("Статистика сброшена!", "success");
             }
+        }
+        
+        // Генерация случайного промокода (для демонстрации)
+        function generateRandomPromoCode() {
+            const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let result = '';
+            for (let i = 0; i < 8; i++) {
+                result += letters.charAt(Math.floor(Math.random() * letters.length));
+            }
+            return result;
         }
         
         // Инициализация игры
@@ -1288,8 +1833,11 @@
             // Обновление интерфейса
             updateBalance();
             updateBet();
-            updateStats();
+            updateProfileStats();
+            updateStatsSection();
             updateHistory();
+            updateDepositHistory();
+            updatePromoCodesList();
             
             // Обработчик кнопки "Крутить"
             spinBtn.addEventListener('click', spin);
@@ -1332,6 +1880,14 @@
                     currentBet = parseInt(this.dataset.bet);
                     updateBet();
                 }, {passive: false});
+            });
+            
+            // Обработчики промокодов
+            applyPromoBtn.addEventListener('click', activatePromoCode);
+            promoInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    activatePromoCode();
+                }
             });
             
             // Обработчики навигации
@@ -1391,6 +1947,11 @@
                     gameMessage.style.color = "#ff9f1a";
                 }
             });
+            
+            // Показываем приветственное сообщение
+            setTimeout(() => {
+                showNotification("Добро пожаловать в Казино 'Ракетка'! Используйте промокоды для пополнения баланса.", "success");
+            }, 1000);
         }
         
         // Запуск игры при загрузке страницы
