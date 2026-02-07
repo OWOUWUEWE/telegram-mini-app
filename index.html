@@ -2,109 +2,123 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Казино "Ракетка" - Игровой автомат</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* Сброс стилей и базовые настройки */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-text-size-adjust: 100%;
         }
         
         body {
-            background: linear-gradient(135deg, #0c2461, #1e3799);
-            color: #fff;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #0a1931 0%, #0c2461 100%);
+            color: white;
             min-height: 100vh;
-            padding: 20px;
+            padding: 10px;
+            overflow-x: hidden;
+            touch-action: manipulation;
         }
         
         .container {
-            max-width: 1200px;
+            max-width: 100%;
             margin: 0 auto;
+            padding: 5px;
         }
         
+        /* Шапка - оптимизирована для мобильных */
         header {
             text-align: center;
-            padding: 20px 0 30px;
+            padding: 10px 0 15px;
+            margin-bottom: 10px;
         }
         
-        h1 {
-            font-size: 3rem;
-            margin-bottom: 10px;
-            text-shadow: 0 2px 10px rgba(255, 255, 255, 0.3);
-            color: #ffd32a;
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 8px;
         }
         
         .logo {
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             color: #ff3838;
-            display: inline-block;
             animation: pulse 2s infinite;
         }
         
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
+        h1 {
+            font-size: 1.8rem;
+            margin: 0;
+            background: linear-gradient(to right, #ff9f1a, #ff3838);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
         }
         
         .subtitle {
-            font-size: 1.2rem;
-            color: #ccc;
-            margin-bottom: 20px;
+            font-size: 0.9rem;
+            color: #aaa;
+            margin-bottom: 5px;
+            line-height: 1.3;
         }
         
+        /* Основная игровая зона - вертикальный стек для мобильных */
         .game-area {
             display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 30px;
-            margin-bottom: 30px;
+            flex-direction: column;
+            gap: 15px;
         }
         
+        /* Игровой автомат */
         .slot-machine {
-            background: linear-gradient(145deg, #182C61, #0a3d62);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            flex: 1;
-            min-width: 300px;
-            max-width: 800px;
+            background: rgba(26, 26, 46, 0.9);
+            border-radius: 15px;
+            padding: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            width: 100%;
         }
         
         .slot-title {
             text-align: center;
-            margin-bottom: 20px;
-            font-size: 1.8rem;
-            color: #ffd32a;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            color: #ff9f1a;
         }
         
+        /* Дисплей слота - адаптивный */
         .slot-display {
-            background-color: #1a1a2e;
-            border-radius: 15px;
-            padding: 20px;
+            background-color: rgba(10, 10, 20, 0.9);
+            border-radius: 12px;
+            padding: 12px;
             display: flex;
             justify-content: space-around;
-            margin-bottom: 30px;
-            border: 5px solid #3c40c6;
-            box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.7);
+            margin-bottom: 20px;
+            border: 4px solid #3c40c6;
+            box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.8), 0 5px 15px rgba(0, 0, 0, 0.5);
         }
         
         .reel {
-            width: 120px;
-            height: 120px;
-            background-color: #2d3436;
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(145deg, #2d3436, #1e272e);
             border-radius: 10px;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 4rem;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            font-size: 2.8rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.7);
             overflow: hidden;
             position: relative;
-            border: 3px solid #575fcf;
+            border: 2px solid #575fcf;
         }
         
         .reel-content {
@@ -113,25 +127,68 @@
             text-align: center;
         }
         
+        /* Панель игрока - оптимизирована */
+        .player-info {
+            background: rgba(26, 26, 46, 0.9);
+            border-radius: 15px;
+            padding: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            width: 100%;
+        }
+        
+        .info-title {
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            color: #ff9f1a;
+        }
+        
+        .balance, .bet, .win {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.95rem;
+        }
+        
+        .value {
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: #ff9f1a;
+            text-shadow: 0 0 8px rgba(255, 211, 42, 0.5);
+        }
+        
+        /* Кнопки управления - большие для касания */
         .controls {
             display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 30px;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px;
         }
         
         .btn {
-            padding: 15px 30px;
-            font-size: 1.2rem;
+            padding: 16px 20px;
+            font-size: 1.1rem;
             font-weight: bold;
             border: none;
-            border-radius: 50px;
+            border-radius: 12px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 10px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            min-height: 55px;
+            width: 100%;
+        }
+        
+        .btn:active {
+            transform: translateY(3px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
         
         .spin-btn {
@@ -139,97 +196,77 @@
             color: white;
         }
         
-        .spin-btn:hover {
-            background: linear-gradient(to right, #ff9f1a, #ff3838);
-            transform: translateY(-5px);
-        }
-        
-        .spin-btn:active {
-            transform: translateY(0);
-        }
-        
         .bet-btn {
             background: linear-gradient(to right, #3c40c6, #575fcf);
             color: white;
         }
         
-        .bet-btn:hover {
-            background: linear-gradient(to right, #575fcf, #3c40c6);
-        }
-        
-        .player-info {
-            background: linear-gradient(145deg, #182C61, #0a3d62);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            width: 300px;
-        }
-        
-        .info-title {
-            text-align: center;
-            margin-bottom: 25px;
-            font-size: 1.8rem;
-            color: #ffd32a;
-        }
-        
-        .balance, .bet, .win {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .value {
-            font-weight: bold;
-            font-size: 1.5rem;
-            color: #ffd32a;
-        }
-        
+        /* Варианты ставок - сетка для мобильных */
         .bet-options {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-top: 15px;
         }
         
         .bet-option {
-            background-color: #3c40c6;
-            border-radius: 10px;
-            padding: 10px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 12px 5px;
             cursor: pointer;
             transition: all 0.2s;
             text-align: center;
-            flex: 1;
-            margin: 0 5px;
+            border: 2px solid transparent;
+            font-size: 0.95rem;
         }
         
-        .bet-option:hover {
-            background-color: #575fcf;
-            transform: scale(1.05);
+        .bet-option:active {
+            transform: scale(0.95);
         }
         
         .bet-option.active {
-            background-color: #ff3838;
-            box-shadow: 0 0 10px rgba(255, 56, 56, 0.7);
+            background: linear-gradient(to right, #3c40c6, #ff3838);
+            border-color: #ff9f1a;
+            box-shadow: 0 0 10px rgba(255, 56, 56, 0.5);
         }
         
-        .history {
-            margin-top: 30px;
-            padding: 15px;
-            background-color: rgba(0, 0, 0, 0.2);
+        /* Сообщения */
+        .game-message {
+            text-align: center;
+            color: #ff9f1a;
+            font-size: 1.1rem;
+            margin-top: 15px;
+            padding: 12px;
             border-radius: 10px;
-            max-height: 150px;
+            background: rgba(0, 0, 0, 0.3);
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* История - компактная */
+        .history {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            max-height: 120px;
             overflow-y: auto;
         }
         
         .history-title {
             margin-bottom: 10px;
-            color: #ffd32a;
+            color: #ff9f1a;
+            font-size: 1rem;
         }
         
         .history-item {
             padding: 5px 0;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.85rem;
+            display: flex;
+            justify-content: space-between;
         }
         
         .win-item {
@@ -240,97 +277,241 @@
             color: #e84118;
         }
         
-        .jackpot {
-            text-align: center;
-            color: #ffd32a;
-            font-size: 1.5rem;
-            margin-top: 20px;
-            animation: glow 1.5s infinite alternate;
-        }
-        
-        @keyframes glow {
-            from { text-shadow: 0 0 5px #ffd32a; }
-            to { text-shadow: 0 0 20px #ffd32a, 0 0 30px #ff9f1a; }
-        }
-        
+        /* Помощь и правила - компактные */
         .help {
-            margin-top: 40px;
+            margin-top: 20px;
             background: rgba(0, 0, 0, 0.2);
-            padding: 20px;
-            border-radius: 15px;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
+            padding: 15px;
+            border-radius: 12px;
+            width: 100%;
         }
         
         .help h3 {
-            color: #ffd32a;
-            margin-bottom: 15px;
+            color: #ff9f1a;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
         }
         
         .rules {
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 15px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
         }
         
         .rule {
-            flex: 1;
-            min-width: 200px;
             background: rgba(60, 64, 198, 0.2);
-            padding: 15px;
-            border-radius: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            line-height: 1.4;
         }
         
-        .rule i {
-            color: #ffd32a;
-            margin-right: 10px;
-        }
-        
+        /* Подвал */
         footer {
             text-align: center;
-            margin-top: 40px;
-            padding-top: 20px;
+            margin-top: 20px;
+            padding-top: 15px;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
-            color: #ccc;
-            font-size: 0.9rem;
+            color: #aaa;
+            font-size: 0.8rem;
+            line-height: 1.4;
         }
         
         .warning {
             color: #ff9f1a;
             font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
         }
         
-        @media (max-width: 768px) {
+        /* Анимации для мобильных (оптимизированные) */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes win-glow {
+            0%, 100% { box-shadow: 0 0 5px #4cd137; }
+            50% { box-shadow: 0 0 20px #4cd137; }
+        }
+        
+        .reel.spinning {
+            animation: spin 0.1s linear infinite;
+        }
+        
+        .reel.win {
+            animation: win-glow 0.5s 3;
+        }
+        
+        /* Горизонтальная ориентация для планшетов и больших телефонов */
+        @media (min-width: 480px) and (orientation: landscape) {
             .game-area {
-                flex-direction: column;
-                align-items: center;
+                flex-direction: row;
+                align-items: flex-start;
+            }
+            
+            .slot-machine {
+                flex: 2;
             }
             
             .player-info {
-                width: 100%;
-                max-width: 500px;
+                flex: 1;
+                max-width: 300px;
             }
             
             .reel {
-                width: 90px;
-                height: 90px;
-                font-size: 3rem;
+                width: 80px;
+                height: 80px;
+                font-size: 3.2rem;
             }
+        }
+        
+        /* Вертикальная ориентация для планшетов */
+        @media (min-width: 768px) and (orientation: portrait) {
+            .container {
+                max-width: 700px;
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .slot-title, .info-title {
+                font-size: 1.5rem;
+            }
+            
+            .reel {
+                width: 100px;
+                height: 100px;
+                font-size: 4rem;
+            }
+            
+            .bet-options {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 10px;
+            }
+            
+            .bet-option {
+                padding: 15px 10px;
+                font-size: 1.1rem;
+            }
+            
+            .btn {
+                font-size: 1.2rem;
+                padding: 18px 25px;
+            }
+            
+            .rules {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        /* Маленькие экраны (до 360px) */
+        @media (max-width: 360px) {
+            .reel {
+                width: 60px;
+                height: 60px;
+                font-size: 2.2rem;
+            }
+            
+            .slot-display {
+                padding: 8px;
+                gap: 5px;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            .btn {
+                padding: 14px 15px;
+                font-size: 1rem;
+                min-height: 50px;
+            }
+            
+            .bet-options {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        /* Очень большие экраны */
+        @media (min-width: 1200px) {
+            .container {
+                max-width: 1100px;
+            }
+            
+            .game-area {
+                flex-direction: row;
+                align-items: flex-start;
+            }
+            
+            .slot-machine {
+                flex: 2;
+            }
+            
+            .player-info {
+                flex: 1;
+                max-width: 400px;
+            }
+        }
+        
+        /* Улучшения для iOS */
+        @supports (-webkit-touch-callout: none) {
+            .btn {
+                min-height: 44px; /* Минимальный размер для удобного касания в iOS */
+            }
+            
+            .bet-option {
+                padding: 14px 5px;
+            }
+        }
+        
+        /* Скрыть полосу прокрутки в некоторых браузерах */
+        .history::-webkit-scrollbar {
+            width: 4px;
+        }
+        
+        .history::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+        }
+        
+        .history::-webkit-scrollbar-thumb {
+            background: #ff9f1a;
+            border-radius: 2px;
+        }
+        
+        /* Предотвращение выделения текста при касании */
+        .btn, .bet-option, .game-tab, .reel {
+            user-select: none;
+            -webkit-user-select: none;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1><span class="logo"><i class="fas fa-rocket"></i></span> Казино "Ракетка"</h1>
-            <p class="subtitle">Испытай удачу в нашем захватывающем игровом автомате!</p>
+            <div class="logo-container">
+                <div class="logo"><i class="fas fa-rocket"></i></div>
+                <h1>Казино "Ракетка"</h1>
+            </div>
+            <p class="subtitle">Испытай удачу в нашем мобильном игровом автомате!</p>
         </header>
         
         <div class="game-area">
             <div class="slot-machine">
-                <h2 class="slot-title">Игровой автомат "Космическая удача"</h2>
+                <h2 class="slot-title">Космический слот-автомат</h2>
                 <div class="slot-display">
                     <div class="reel" id="reel1">
                         <div class="reel-content">🍒</div>
@@ -343,17 +524,17 @@
                     </div>
                 </div>
                 
-                <div class="jackpot" id="jackpotMessage">
-                    Крутите барабаны и выигрывайте!
-                </div>
-                
                 <div class="controls">
                     <button class="btn spin-btn" id="spinBtn">
-                        <i class="fas fa-play"></i> Крутить
+                        <i class="fas fa-play"></i> Крутить барабаны
                     </button>
                     <button class="btn bet-btn" id="autoSpinBtn">
                         <i class="fas fa-sync-alt"></i> Авто-спин
                     </button>
+                </div>
+                
+                <div class="game-message" id="gameMessage">
+                    Добро пожаловать! Сделайте ставку и крутите барабаны!
                 </div>
             </div>
             
@@ -361,17 +542,17 @@
                 <h2 class="info-title">Ваш счет</h2>
                 
                 <div class="balance">
-                    <span>Баланс:</span>
+                    <span><i class="fas fa-wallet"></i> Баланс:</span>
                     <span class="value" id="balanceValue">1000</span>
                 </div>
                 
                 <div class="bet">
-                    <span>Ставка:</span>
+                    <span><i class="fas fa-coins"></i> Ставка:</span>
                     <span class="value" id="betValue">10</span>
                 </div>
                 
                 <div class="win">
-                    <span>Последний выигрыш:</span>
+                    <span><i class="fas fa-trophy"></i> Выигрыш:</span>
                     <span class="value" id="winValue">0</span>
                 </div>
                 
@@ -380,10 +561,12 @@
                     <div class="bet-option" data-bet="50">50</div>
                     <div class="bet-option" data-bet="100">100</div>
                     <div class="bet-option" data-bet="200">200</div>
+                    <div class="bet-option" data-bet="500">500</div>
+                    <div class="bet-option" data-bet="1000">1000</div>
                 </div>
                 
                 <div class="history">
-                    <div class="history-title">История игр:</div>
+                    <div class="history-title"><i class="fas fa-history"></i> История</div>
                     <div id="historyList"></div>
                 </div>
             </div>
@@ -393,29 +576,30 @@
             <h3><i class="fas fa-info-circle"></i> Правила игры</h3>
             <div class="rules">
                 <div class="rule">
-                    <p><i class="fas fa-rocket"></i> <strong>3 ракетки:</strong> Джекпот! Выигрыш х100 от ставки</p>
+                    <i class="fas fa-rocket"></i> <strong>3 ракетки:</strong> Джекпот! Выигрыш x100
                 </div>
                 <div class="rule">
-                    <p><i class="fas fa-star"></i> <strong>3 звезды:</strong> Выигрыш х50 от ставки</p>
+                    <i class="fas fa-star"></i> <strong>3 звезды:</strong> Выигрыш x50
                 </div>
                 <div class="rule">
-                    <p><i class="fas fa-lemon"></i> <strong>3 вишни:</strong> Выигрыш х20 от ставки</p>
+                    <i class="fas fa-lemon"></i> <strong>3 вишни:</strong> Выигрыш x20
                 </div>
                 <div class="rule">
-                    <p><i class="fas fa-random"></i> <strong>Любая комбинация:</strong> Выигрыш х2 от ставки</p>
+                    <i class="fas fa-random"></i> <strong>2 одинаковых:</strong> Выигрыш x2
                 </div>
             </div>
         </div>
         
         <footer>
-            <p class="warning"><i class="fas fa-exclamation-triangle"></i> Играйте ответственно. Азартные игры могут вызывать зависимость.</p>
-            <p>Казино "Ракетка" © 2023. Игра создана в развлекательных целях. Все выигрыши виртуальные.</p>
+            <p class="warning"><i class="fas fa-exclamation-triangle"></i> Играйте ответственно!</p>
+            <p>Казино "Ракетка" © 2023. Игра создана в развлекательных целях.</p>
+            <p>Оптимизировано для мобильных устройств</p>
         </footer>
     </div>
 
     <script>
         // Игровые переменные
-        let balance = 10000;
+        let balance = 1000;
         let currentBet = 10;
         let lastWin = 0;
         let isSpinning = false;
@@ -432,7 +616,7 @@
         const winElement = document.getElementById('winValue');
         const spinBtn = document.getElementById('spinBtn');
         const autoSpinBtn = document.getElementById('autoSpinBtn');
-        const jackpotMessage = document.getElementById('jackpotMessage');
+        const gameMessage = document.getElementById('gameMessage');
         const historyList = document.getElementById('historyList');
         const reels = [
             document.getElementById('reel1'),
@@ -456,11 +640,11 @@
             });
         }
         
-        // Функция вращения барабана
+        // Функция вращения барабана (оптимизированная для мобильных)
         function spinReel(reelElement) {
             return new Promise(resolve => {
                 let spinCount = 0;
-                const maxSpins = 20 + Math.floor(Math.random() * 10);
+                const maxSpins = 15 + Math.floor(Math.random() * 8); // Меньше вращений для скорости
                 
                 const spinInterval = setInterval(() => {
                     // Генерация случайного символа
@@ -472,7 +656,7 @@
                         clearInterval(spinInterval);
                         resolve();
                     }
-                }, 50);
+                }, 60); // Немного медленнее для плавности на мобильных
             });
         }
         
@@ -482,7 +666,7 @@
             
             // Проверка на джекпот (3 ракетки)
             if (s1 === '🚀' && s2 === '🚀' && s3 === '🚀') {
-                return {multiplier: 100, message: "ДЖЕКПОТ! 3 РАКЕТКИ!"};
+                return {multiplier: 100, message: "🎉 ДЖЕКПОТ! 3 РАКЕТКИ!"};
             }
             
             // Проверка на 3 звезды
@@ -509,20 +693,25 @@
             return {multiplier: 0, message: "Попробуйте еще раз!"};
         }
         
-        // Основная функция вращения
+        // Основная функция вращения (оптимизированная)
         async function spin() {
             if (isSpinning) return;
             
             // Проверка баланса
             if (balance < currentBet) {
-                jackpotMessage.textContent = "Недостаточно средств на балансе!";
-                jackpotMessage.style.color = "#ff3838";
+                gameMessage.textContent = "Недостаточно средств!";
+                gameMessage.style.color = "#ff3838";
                 return;
             }
             
             isSpinning = true;
             balance -= currentBet;
             updateUI();
+            
+            // Добавляем класс вращения
+            reels.forEach(reel => {
+                reel.classList.add('spinning');
+            });
             
             // Вращение каждого барабана с небольшой задержкой между ними
             const finalSymbols = [];
@@ -535,9 +724,26 @@
                 reels[i].querySelector('.reel-content').textContent = randomSymbol;
                 finalSymbols.push(randomSymbol);
                 
-                // Небольшая пауза между барабанами
-                await new Promise(resolve => setTimeout(resolve, 200));
+                // Небольшая пауза между барабанами для эффекта
+                if (i < reels.length - 1) {
+                    await new Promise(resolve => setTimeout(resolve, 150));
+                }
             }
+            
+            // Убираем класс вращения
+            reels.forEach(reel => {
+                reel.classList.remove('spinning');
+            });
+            
+            // Эффект остановки
+            reels.forEach((reel, index) => {
+                setTimeout(() => {
+                    reel.style.transform = 'scale(1.1)';
+                    setTimeout(() => {
+                        reel.style.transform = 'scale(1)';
+                    }, 100);
+                }, index * 50);
+            });
             
             // Расчет выигрыша
             const winResult = calculateWin(finalSymbols);
@@ -546,18 +752,23 @@
             if (winAmount > 0) {
                 balance += winAmount;
                 lastWin = winAmount;
-                jackpotMessage.textContent = winResult.message + ` Вы выиграли ${winAmount}!`;
-                jackpotMessage.style.color = "#4cd137";
+                gameMessage.textContent = winResult.message + ` Выигрыш: ${winAmount}!`;
+                gameMessage.style.color = "#4cd137";
                 
                 // Анимация выигрыша
-                jackpotMessage.style.animation = 'glow 0.5s infinite alternate';
+                reels.forEach(reel => {
+                    reel.classList.add('win');
+                });
+                
                 setTimeout(() => {
-                    jackpotMessage.style.animation = 'glow 1.5s infinite alternate';
-                }, 2000);
+                    reels.forEach(reel => {
+                        reel.classList.remove('win');
+                    });
+                }, 1500);
             } else {
                 lastWin = 0;
-                jackpotMessage.textContent = winResult.message;
-                jackpotMessage.style.color = "#ff9f1a";
+                gameMessage.textContent = winResult.message;
+                gameMessage.style.color = "#ff9f1a";
             }
             
             // Добавление в историю
@@ -565,7 +776,7 @@
                 symbols: [...finalSymbols],
                 win: winAmount,
                 bet: currentBet,
-                time: new Date().toLocaleTimeString()
+                time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
             };
             
             history.unshift(historyItem);
@@ -583,8 +794,8 @@
                 setTimeout(spin, 1000);
             } else if (autoSpin && balance < currentBet) {
                 toggleAutoSpin();
-                jackpotMessage.textContent = "Автоспин остановлен: недостаточно средств!";
-                jackpotMessage.style.color = "#ff3838";
+                gameMessage.textContent = "Автоспин остановлен: недостаточно средств!";
+                gameMessage.style.color = "#ff3838";
             }
         }
         
@@ -595,7 +806,17 @@
             history.forEach(item => {
                 const historyElement = document.createElement('div');
                 historyElement.className = `history-item ${item.win > 0 ? 'win-item' : 'loss-item'}`;
-                historyElement.textContent = `${item.time} - ${item.symbols.join(' ')} - ${item.win > 0 ? '+' + item.win : 'Проигрыш'}`;
+                
+                // Форматируем время и результат
+                const symbolsText = item.symbols.join(' ');
+                const resultText = item.win > 0 ? `+${item.win}` : `-${item.bet}`;
+                
+                historyElement.innerHTML = `
+                    <span>${item.time}</span>
+                    <span>${symbolsText}</span>
+                    <span>${resultText}</span>
+                `;
+                
                 historyList.appendChild(historyElement);
             });
         }
@@ -609,7 +830,7 @@
                 autoSpinBtn.style.background = 'linear-gradient(to right, #e84118, #ff3838)';
                 
                 // Запуск спина, если не вращается в данный момент
-                if (!isSpinning) {
+                if (!isSpinning && balance >= currentBet) {
                     spin();
                 }
             } else {
@@ -623,11 +844,19 @@
             updateUI();
             updateHistory();
             
-            // Обработчик кнопки "Крутить"
+            // Обработчик кнопки "Крутить" - touch и click
             spinBtn.addEventListener('click', spin);
+            spinBtn.addEventListener('touchstart', function(e) {
+                e.preventDefault();
+                spin();
+            }, {passive: false});
             
             // Обработчик кнопки "Автоспин"
             autoSpinBtn.addEventListener('click', toggleAutoSpin);
+            autoSpinBtn.addEventListener('touchstart', function(e) {
+                e.preventDefault();
+                toggleAutoSpin();
+            }, {passive: false});
             
             // Обработчики выбора ставки
             document.querySelectorAll('.bet-option').forEach(option => {
@@ -637,6 +866,14 @@
                     currentBet = parseInt(this.dataset.bet);
                     updateUI();
                 });
+                
+                option.addEventListener('touchstart', function(e) {
+                    e.preventDefault();
+                    if (isSpinning) return;
+                    
+                    currentBet = parseInt(this.dataset.bet);
+                    updateUI();
+                }, {passive: false});
             });
             
             // Добавление анимации к барабанам при загрузке
@@ -652,24 +889,65 @@
                     });
                 }, 300);
             }, 500);
+            
+            // Обработка изменения ориентации экрана
+            window.addEventListener('orientationchange', function() {
+                // Небольшая задержка для обновления layout
+                setTimeout(() => {
+                    // Перерисовка для адаптации под новую ориентацию
+                    updateUI();
+                }, 300);
+            });
+            
+            // Предотвращение контекстного меню на кнопках
+            document.addEventListener('contextmenu', function(e) {
+                if (e.target.classList.contains('btn') || 
+                    e.target.classList.contains('bet-option') ||
+                    e.target.classList.contains('reel')) {
+                    e.preventDefault();
+                }
+            });
         }
         
         // Запуск игры при загрузке страницы
         window.addEventListener('DOMContentLoaded', initGame);
         
-        // Добавление эффектов при наведении на барабаны
+        // Добавление эффектов при касании на барабаны
         reels.forEach(reel => {
+            // Для touch устройств
+            reel.addEventListener('touchstart', function() {
+                if (!isSpinning) {
+                    this.style.boxShadow = '0 0 15px #ffd32a';
+                }
+            });
+            
+            reel.addEventListener('touchend', function() {
+                this.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.7)';
+            });
+            
+            // Для десктопов
             reel.addEventListener('mouseenter', function() {
                 if (!isSpinning) {
-                    this.style.boxShadow = '0 0 20px #ffd32a';
+                    this.style.boxShadow = '0 0 15px #ffd32a';
                 }
             });
             
             reel.addEventListener('mouseleave', function() {
-                this.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.5)';
+                this.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.7)';
             });
+        });
+        
+        // Оптимизация для экономии заряда батареи
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                // Если страница скрыта, останавливаем автоспин
+                if (autoSpin) {
+                    toggleAutoSpin();
+                    gameMessage.textContent = "Автоспин приостановлен (страница неактивна)";
+                    gameMessage.style.color = "#ff9f1a";
+                }
+            }
         });
     </script>
 </body>
-
 </html>
