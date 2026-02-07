@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Казино "Ракетка" - Игровой автомат</title>
+    <title>Казино "Ракетка" - Telegram Mini App</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Telegram Web App SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         /* Сброс стилей и базовые настройки */
         * {
@@ -20,7 +22,7 @@
             background: linear-gradient(135deg, #0a1931 0%, #0c2461 100%);
             color: white;
             min-height: 100vh;
-            padding: 10px;
+            padding: 0;
             overflow-x: hidden;
             touch-action: manipulation;
         }
@@ -28,7 +30,8 @@
         .container {
             max-width: 100%;
             margin: 0 auto;
-            padding: 5px;
+            padding: 15px;
+            padding-bottom: 80px; /* Отступ для нижнего меню */
         }
         
         /* Шапка - оптимизирована для мобильных */
@@ -36,6 +39,7 @@
             text-align: center;
             padding: 10px 0 15px;
             margin-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
         
         .logo-container {
@@ -69,11 +73,43 @@
             line-height: 1.3;
         }
         
-        /* Основная игровая зона - вертикальный стек для мобильных */
-        .game-area {
+        /* Информация о пользователе */
+        .user-info {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 15px;
             display: flex;
-            flex-direction: column;
-            gap: 15px;
+            align-items: center;
+            gap: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .user-details {
+            flex: 1;
+        }
+        
+        .user-name {
+            font-weight: bold;
+            font-size: 1rem;
+            margin-bottom: 4px;
+        }
+        
+        .user-id {
+            font-size: 0.8rem;
+            color: #aaa;
         }
         
         /* Игровой автомат */
@@ -85,6 +121,7 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
             width: 100%;
+            margin-bottom: 15px;
         }
         
         .slot-title {
@@ -94,7 +131,7 @@
             color: #ff9f1a;
         }
         
-        /* Дисплей слота - адаптивный */
+        /* Дисплей слота */
         .slot-display {
             background-color: rgba(10, 10, 20, 0.9);
             border-radius: 12px;
@@ -127,8 +164,8 @@
             text-align: center;
         }
         
-        /* Панель игрока - оптимизирована */
-        .player-info {
+        /* Панель баланса и ставок */
+        .balance-panel {
             background: rgba(26, 26, 46, 0.9);
             border-radius: 15px;
             padding: 15px;
@@ -136,13 +173,7 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
             width: 100%;
-        }
-        
-        .info-title {
-            text-align: center;
             margin-bottom: 15px;
-            font-size: 1.3rem;
-            color: #ff9f1a;
         }
         
         .balance, .bet, .win {
@@ -161,7 +192,81 @@
             text-shadow: 0 0 8px rgba(255, 211, 42, 0.5);
         }
         
-        /* Кнопки управления - большие для касания */
+        /* Поле для ввода ставки */
+        .bet-input-container {
+            margin: 15px 0;
+        }
+        
+        .bet-input-label {
+            display: block;
+            margin-bottom: 8px;
+            color: #ff9f1a;
+            font-size: 1rem;
+        }
+        
+        .bet-input-wrapper {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .bet-input {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid #3c40c6;
+            border-radius: 10px;
+            padding: 12px 15px;
+            color: white;
+            font-size: 1.1rem;
+            text-align: center;
+            outline: none;
+        }
+        
+        .bet-input:focus {
+            border-color: #ff9f1a;
+            box-shadow: 0 0 10px rgba(255, 159, 26, 0.5);
+        }
+        
+        .max-bet-btn {
+            background: linear-gradient(to right, #3c40c6, #575fcf);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 0 15px;
+            font-weight: bold;
+            cursor: pointer;
+            min-width: 60px;
+        }
+        
+        /* Быстрые ставки */
+        .quick-bets {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-top: 15px;
+        }
+        
+        .quick-bet {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 12px 5px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+            border: 2px solid transparent;
+            font-size: 0.95rem;
+        }
+        
+        .quick-bet:active {
+            transform: scale(0.95);
+        }
+        
+        .quick-bet.active {
+            background: linear-gradient(to right, #3c40c6, #ff3838);
+            border-color: #ff9f1a;
+            box-shadow: 0 0 10px rgba(255, 56, 56, 0.5);
+        }
+        
+        /* Кнопки управления */
         .controls {
             display: flex;
             flex-direction: column;
@@ -196,38 +301,49 @@
             color: white;
         }
         
-        .bet-btn {
+        .auto-btn {
             background: linear-gradient(to right, #3c40c6, #575fcf);
             color: white;
         }
         
-        /* Варианты ставок - сетка для мобильных */
-        .bet-options {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            margin-top: 15px;
+        /* Нижнее меню навигации */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(26, 26, 46, 0.95);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            display: flex;
+            padding: 10px 0;
+            z-index: 1000;
         }
         
-        .bet-option {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            padding: 12px 5px;
-            cursor: pointer;
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 5px;
+            color: #aaa;
+            text-decoration: none;
+            font-size: 0.8rem;
             transition: all 0.2s;
-            text-align: center;
-            border: 2px solid transparent;
-            font-size: 0.95rem;
         }
         
-        .bet-option:active {
-            transform: scale(0.95);
+        .nav-item:active {
+            color: #ff9f1a;
         }
         
-        .bet-option.active {
-            background: linear-gradient(to right, #3c40c6, #ff3838);
-            border-color: #ff9f1a;
-            box-shadow: 0 0 10px rgba(255, 56, 56, 0.5);
+        .nav-item.active {
+            color: #ff9f1a;
+        }
+        
+        .nav-icon {
+            font-size: 1.2rem;
+            margin-bottom: 4px;
         }
         
         /* Сообщения */
@@ -245,13 +361,13 @@
             justify-content: center;
         }
         
-        /* История - компактная */
+        /* История */
         .history {
             margin-top: 20px;
             padding: 15px;
             background: rgba(0, 0, 0, 0.3);
             border-radius: 10px;
-            max-height: 120px;
+            max-height: 200px;
             overflow-y: auto;
         }
         
@@ -277,13 +393,18 @@
             color: #e84118;
         }
         
-        /* Помощь и правила - компактные */
+        /* Помощь и правила */
         .help {
             margin-top: 20px;
             background: rgba(0, 0, 0, 0.2);
             padding: 15px;
             border-radius: 12px;
             width: 100%;
+            display: none; /* Скрыто по умолчанию */
+        }
+        
+        .help.active {
+            display: block;
         }
         
         .help h3 {
@@ -306,25 +427,35 @@
             line-height: 1.4;
         }
         
-        /* Подвал */
-        footer {
-            text-align: center;
+        /* Статистика */
+        .stats {
             margin-top: 20px;
-            padding-top: 15px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            color: #aaa;
-            font-size: 0.8rem;
-            line-height: 1.4;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 12px;
+            width: 100%;
+            display: none; /* Скрыто по умолчанию */
         }
         
-        .warning {
+        .stats.active {
+            display: block;
+        }
+        
+        .stats h3 {
             color: #ff9f1a;
-            font-weight: bold;
-            margin-bottom: 8px;
-            font-size: 0.9rem;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
         }
         
-        /* Анимации для мобильных (оптимизированные) */
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Анимации */
         @keyframes pulse {
             0% { transform: scale(1); }
             50% { transform: scale(1.05); }
@@ -349,46 +480,11 @@
             animation: win-glow 0.5s 3;
         }
         
-        /* Горизонтальная ориентация для планшетов и больших телефонов */
-        @media (min-width: 480px) and (orientation: landscape) {
-            .game-area {
-                flex-direction: row;
-                align-items: flex-start;
-            }
-            
-            .slot-machine {
-                flex: 2;
-            }
-            
-            .player-info {
-                flex: 1;
-                max-width: 300px;
-            }
-            
-            .reel {
-                width: 80px;
-                height: 80px;
-                font-size: 3.2rem;
-            }
-        }
-        
-        /* Вертикальная ориентация для планшетов */
-        @media (min-width: 768px) and (orientation: portrait) {
+        /* Адаптация для планшетов */
+        @media (min-width: 768px) {
             .container {
-                max-width: 700px;
-                padding: 15px;
-            }
-            
-            h1 {
-                font-size: 2.5rem;
-            }
-            
-            .subtitle {
-                font-size: 1.1rem;
-            }
-            
-            .slot-title, .info-title {
-                font-size: 1.5rem;
+                max-width: 500px;
+                margin: 0 auto;
             }
             
             .reel {
@@ -397,19 +493,8 @@
                 font-size: 4rem;
             }
             
-            .bet-options {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 10px;
-            }
-            
-            .bet-option {
-                padding: 15px 10px;
-                font-size: 1.1rem;
-            }
-            
-            .btn {
-                font-size: 1.2rem;
-                padding: 18px 25px;
+            .quick-bets {
+                grid-template-columns: repeat(6, 1fr);
             }
             
             .rules {
@@ -417,64 +502,42 @@
             }
         }
         
-        /* Маленькие экраны (до 360px) */
-        @media (max-width: 360px) {
-            .reel {
-                width: 60px;
-                height: 60px;
-                font-size: 2.2rem;
+        /* Адаптация для горизонтальной ориентации */
+        @media (orientation: landscape) and (max-height: 600px) {
+            .container {
+                padding-bottom: 60px;
             }
             
             .slot-display {
                 padding: 8px;
-                gap: 5px;
             }
             
-            h1 {
-                font-size: 1.5rem;
+            .reel {
+                width: 60px;
+                height: 60px;
+                font-size: 2.5rem;
             }
             
-            .btn {
-                padding: 14px 15px;
-                font-size: 1rem;
-                min-height: 50px;
-            }
-            
-            .bet-options {
-                grid-template-columns: repeat(2, 1fr);
+            .balance-panel, .slot-machine {
+                padding: 10px;
             }
         }
         
-        /* Очень большие экраны */
-        @media (min-width: 1200px) {
-            .container {
-                max-width: 1100px;
-            }
-            
-            .game-area {
-                flex-direction: row;
-                align-items: flex-start;
-            }
-            
-            .slot-machine {
-                flex: 2;
-            }
-            
-            .player-info {
-                flex: 1;
-                max-width: 400px;
-            }
+        /* Стили для Telegram Web App */
+        .tg-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--tg-theme-bg-color, #0a1931);
+            z-index: -1;
         }
         
-        /* Улучшения для iOS */
-        @supports (-webkit-touch-callout: none) {
-            .btn {
-                min-height: 44px; /* Минимальный размер для удобного касания в iOS */
-            }
-            
-            .bet-option {
-                padding: 14px 5px;
-            }
+        /* Предотвращение выделения текста при касании */
+        .btn, .quick-bet, .nav-item, .reel {
+            user-select: none;
+            -webkit-user-select: none;
         }
         
         /* Скрыть полосу прокрутки в некоторых браузерах */
@@ -492,24 +555,41 @@
             border-radius: 2px;
         }
         
-        /* Предотвращение выделения текста при касании */
-        .btn, .bet-option, .game-tab, .reel {
-            user-select: none;
-            -webkit-user-select: none;
+        /* Анимация появления */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.3s ease-out;
         }
     </style>
 </head>
 <body>
+    <!-- Фон для Telegram -->
+    <div class="tg-background"></div>
+    
     <div class="container">
         <header>
             <div class="logo-container">
                 <div class="logo"><i class="fas fa-rocket"></i></div>
                 <h1>Казино "Ракетка"</h1>
             </div>
-            <p class="subtitle">Испытай удачу в нашем мобильном игровом автомате!</p>
+            <p class="subtitle">Telegram Mini App • Баланс синхронизируется</p>
         </header>
         
-        <div class="game-area">
+        <!-- Информация о пользователе Telegram -->
+        <div class="user-info" id="userInfo">
+            <div class="user-avatar" id="userAvatar">U</div>
+            <div class="user-details">
+                <div class="user-name" id="userName">Загрузка...</div>
+                <div class="user-id">ID: <span id="userId">000000</span></div>
+            </div>
+        </div>
+        
+        <!-- Основная игра (видна по умолчанию) -->
+        <div id="gameSection">
             <div class="slot-machine">
                 <h2 class="slot-title">Космический слот-автомат</h2>
                 <div class="slot-display">
@@ -524,23 +604,21 @@
                     </div>
                 </div>
                 
+                <div class="game-message" id="gameMessage">
+                    Добро пожаловать! Введите ставку и крутите барабаны!
+                </div>
+                
                 <div class="controls">
                     <button class="btn spin-btn" id="spinBtn">
                         <i class="fas fa-play"></i> Крутить барабаны
                     </button>
-                    <button class="btn bet-btn" id="autoSpinBtn">
+                    <button class="btn auto-btn" id="autoSpinBtn">
                         <i class="fas fa-sync-alt"></i> Авто-спин
                     </button>
                 </div>
-                
-                <div class="game-message" id="gameMessage">
-                    Добро пожаловать! Сделайте ставку и крутите барабаны!
-                </div>
             </div>
             
-            <div class="player-info">
-                <h2 class="info-title">Ваш счет</h2>
-                
+            <div class="balance-panel">
                 <div class="balance">
                     <span><i class="fas fa-wallet"></i> Баланс:</span>
                     <span class="value" id="balanceValue">1000</span>
@@ -552,27 +630,36 @@
                 </div>
                 
                 <div class="win">
-                    <span><i class="fas fa-trophy"></i> Выигрыш:</span>
+                    <span><i class="fas fa-trophy"></i> Последний выигрыш:</span>
                     <span class="value" id="winValue">0</span>
                 </div>
                 
-                <div class="bet-options">
-                    <div class="bet-option active" data-bet="10">10</div>
-                    <div class="bet-option" data-bet="50">50</div>
-                    <div class="bet-option" data-bet="100">100</div>
-                    <div class="bet-option" data-bet="200">200</div>
-                    <div class="bet-option" data-bet="500">500</div>
-                    <div class="bet-option" data-bet="1000">1000</div>
+                <div class="bet-input-container">
+                    <label class="bet-input-label">Введите свою ставку:</label>
+                    <div class="bet-input-wrapper">
+                        <input type="number" class="bet-input" id="betInput" value="10" min="1" max="10000" step="1">
+                        <button class="max-bet-btn" id="maxBetBtn">MAX</button>
+                    </div>
+                </div>
+                
+                <div class="quick-bets">
+                    <div class="quick-bet active" data-bet="10">10</div>
+                    <div class="quick-bet" data-bet="50">50</div>
+                    <div class="quick-bet" data-bet="100">100</div>
+                    <div class="quick-bet" data-bet="200">200</div>
+                    <div class="quick-bet" data-bet="500">500</div>
+                    <div class="quick-bet" data-bet="1000">1000</div>
                 </div>
                 
                 <div class="history">
-                    <div class="history-title"><i class="fas fa-history"></i> История</div>
+                    <div class="history-title"><i class="fas fa-history"></i> История игр</div>
                     <div id="historyList"></div>
                 </div>
             </div>
         </div>
         
-        <div class="help">
+        <!-- Помощь и правила (скрыто по умолчанию) -->
+        <div class="help" id="helpSection">
             <h3><i class="fas fa-info-circle"></i> Правила игры</h3>
             <div class="rules">
                 <div class="rule">
@@ -585,30 +672,94 @@
                     <i class="fas fa-lemon"></i> <strong>3 вишни:</strong> Выигрыш x20
                 </div>
                 <div class="rule">
+                    <i class="fas fa-gem"></i> <strong>3 алмаза:</strong> Выигрыш x30
+                </div>
+                <div class="rule">
+                    <i class="fas fa-crown"></i> <strong>3 короны:</strong> Выигрыш x20
+                </div>
+                <div class="rule">
                     <i class="fas fa-random"></i> <strong>2 одинаковых:</strong> Выигрыш x2
                 </div>
             </div>
+            
+            <h3 style="margin-top: 20px;"><i class="fas fa-sync-alt"></i> Синхронизация</h3>
+            <div class="rule">
+                Ваш баланс автоматически синхронизируется через Telegram. 
+                Вы можете играть с любого устройства, и ваш прогресс будет сохранен.
+            </div>
         </div>
         
-        <footer>
-            <p class="warning"><i class="fas fa-exclamation-triangle"></i> Играйте ответственно!</p>
-            <p>Казино "Ракетка" © 2023. Игра создана в развлекательных целях.</p>
-            <p>Оптимизировано для мобильных устройств</p>
-        </footer>
+        <!-- Статистика (скрыто по умолчанию) -->
+        <div class="stats" id="statsSection">
+            <h3><i class="fas fa-chart-bar"></i> Статистика</h3>
+            <div class="stat-item">
+                <span>Всего сыграно игр:</span>
+                <span id="totalGames">0</span>
+            </div>
+            <div class="stat-item">
+                <span>Побед:</span>
+                <span id="totalWins">0</span>
+            </div>
+            <div class="stat-item">
+                <span>Проигрышей:</span>
+                <span id="totalLosses">0</span>
+            </div>
+            <div class="stat-item">
+                <span>Общий выигрыш:</span>
+                <span id="totalWinAmount">0</span>
+            </div>
+            <div class="stat-item">
+                <span>Максимальный выигрыш:</span>
+                <span id="maxWin">0</span>
+            </div>
+            <div class="stat-item">
+                <span>Процент побед:</span>
+                <span id="winRate">0%</span>
+            </div>
+            
+            <button class="btn spin-btn" id="resetStatsBtn" style="margin-top: 15px;">
+                <i class="fas fa-redo"></i> Сбросить статистику
+            </button>
+        </div>
+        
+        <!-- Нижнее меню навигации -->
+        <div class="bottom-nav">
+            <a href="#" class="nav-item active" data-section="game">
+                <div class="nav-icon"><i class="fas fa-gamepad"></i></div>
+                <div>Игра</div>
+            </a>
+            <a href="#" class="nav-item" data-section="stats">
+                <div class="nav-icon"><i class="fas fa-chart-bar"></i></div>
+                <div>Статистика</div>
+            </a>
+            <a href="#" class="nav-item" data-section="help">
+                <div class="nav-icon"><i class="fas fa-info-circle"></i></div>
+                <div>Помощь</div>
+            </a>
+        </div>
     </div>
 
     <script>
-        // Игровые переменные
+        // Глобальные переменные
         let balance = 1000;
         let currentBet = 10;
         let lastWin = 0;
         let isSpinning = false;
         let autoSpin = false;
-        let spinInterval;
         let history = [];
+        let userData = null;
+        
+        // Статистика
+        let stats = {
+            totalGames: 0,
+            totalWins: 0,
+            totalLosses: 0,
+            totalWinAmount: 0,
+            maxWin: 0
+        };
         
         // Символы для барабанов
-        const symbols = ['🍒', '⭐', '🚀', '🍋', '🔔', '💎'];
+        const symbols = ['🍒', '⭐', '🚀', '💎', '👑', '🔔', '🍋', '7️⃣'];
         
         // Элементы DOM
         const balanceElement = document.getElementById('balanceValue');
@@ -618,36 +769,246 @@
         const autoSpinBtn = document.getElementById('autoSpinBtn');
         const gameMessage = document.getElementById('gameMessage');
         const historyList = document.getElementById('historyList');
+        const betInput = document.getElementById('betInput');
+        const maxBetBtn = document.getElementById('maxBetBtn');
         const reels = [
             document.getElementById('reel1'),
             document.getElementById('reel2'),
             document.getElementById('reel3')
         ];
         
-        // Функция обновления интерфейса
-        function updateUI() {
-            balanceElement.textContent = balance;
-            betElement.textContent = currentBet;
-            winElement.textContent = lastWin;
-            
-            // Обновление активной ставки
-            document.querySelectorAll('.bet-option').forEach(option => {
-                if (parseInt(option.dataset.bet) === currentBet) {
-                    option.classList.add('active');
+        // Элементы Telegram
+        const userInfo = document.getElementById('userInfo');
+        const userAvatar = document.getElementById('userAvatar');
+        const userName = document.getElementById('userName');
+        const userId = document.getElementById('userId');
+        
+        // Элементы навигации
+        const gameSection = document.getElementById('gameSection');
+        const helpSection = document.getElementById('helpSection');
+        const statsSection = document.getElementById('statsSection');
+        const navItems = document.querySelectorAll('.nav-item');
+        
+        // Элементы статистики
+        const totalGamesElement = document.getElementById('totalGames');
+        const totalWinsElement = document.getElementById('totalWins');
+        const totalLossesElement = document.getElementById('totalLosses');
+        const totalWinAmountElement = document.getElementById('totalWinAmount');
+        const maxWinElement = document.getElementById('maxWin');
+        const winRateElement = document.getElementById('winRate');
+        const resetStatsBtn = document.getElementById('resetStatsBtn');
+        
+        // Ключи для localStorage
+        const STORAGE_KEYS = {
+            BALANCE: 'rocket_casino_balance',
+            STATS: 'rocket_casino_stats',
+            HISTORY: 'rocket_casino_history'
+        };
+        
+        // Инициализация Telegram Web App
+        function initTelegramApp() {
+            // Проверяем, запущено ли приложение в Telegram
+            if (window.Telegram && Telegram.WebApp) {
+                console.log('Telegram Web App инициализирован');
+                
+                // Расширяем приложение на весь экран
+                Telegram.WebApp.expand();
+                
+                // Получаем данные пользователя
+                const user = Telegram.WebApp.initDataUnsafe.user;
+                
+                if (user) {
+                    userData = user;
+                    
+                    // Отображаем информацию о пользователе
+                    userName.textContent = `${user.first_name || ''} ${user.last_name || ''}`.trim() || 'Анонимный игрок';
+                    userId.textContent = user.id || '000000';
+                    
+                    // Устанавливаем аватар
+                    if (user.username) {
+                        userAvatar.textContent = user.username.charAt(0).toUpperCase();
+                    } else if (user.first_name) {
+                        userAvatar.textContent = user.first_name.charAt(0).toUpperCase();
+                    }
+                    
+                    // Загружаем данные пользователя из localStorage с привязкой к ID
+                    loadUserData(user.id);
+                    
+                    // Показываем информацию о пользователе
+                    userInfo.classList.add('fade-in');
+                    
+                    // Настраиваем тему Telegram
+                    applyTelegramTheme();
                 } else {
-                    option.classList.remove('active');
+                    // Если данные пользователя недоступны, используем локальное хранилище
+                    console.log('Данные пользователя недоступны, используем локальное хранилище');
+                    loadUserData('local_user');
+                }
+                
+                // Обработчик нажатия на основную кнопку (если нужно)
+                Telegram.WebApp.MainButton.setText("Играть снова");
+                Telegram.WebApp.MainButton.hide();
+                
+                // Обработчик изменения темы
+                Telegram.WebApp.onEvent('themeChanged', applyTelegramTheme);
+                
+            } else {
+                // Если приложение запущено не в Telegram, используем локальное хранилище
+                console.log('Приложение запущено не в Telegram');
+                userName.textContent = 'Локальный игрок';
+                userId.textContent = 'local';
+                loadUserData('local_user');
+            }
+        }
+        
+        // Применение темы Telegram
+        function applyTelegramTheme() {
+            if (!Telegram.WebApp) return;
+            
+            const themeParams = Telegram.WebApp.themeParams;
+            const bgColor = themeParams.bg_color || '#0a1931';
+            const textColor = themeParams.text_color || '#ffffff';
+            
+            // Применяем цвета темы
+            document.querySelector('.tg-background').style.backgroundColor = bgColor;
+            document.body.style.color = textColor;
+            
+            // Также можно применить другие параметры темы по необходимости
+        }
+        
+        // Загрузка данных пользователя
+        function loadUserData(userId) {
+            try {
+                // Загружаем баланс
+                const savedBalance = localStorage.getItem(`${STORAGE_KEYS.BALANCE}_${userId}`);
+                if (savedBalance) {
+                    balance = parseInt(savedBalance);
+                    updateBalance();
+                }
+                
+                // Загружаем статистику
+                const savedStats = localStorage.getItem(`${STORAGE_KEYS.STATS}_${userId}`);
+                if (savedStats) {
+                    stats = JSON.parse(savedStats);
+                    updateStats();
+                }
+                
+                // Загружаем историю
+                const savedHistory = localStorage.getItem(`${STORAGE_KEYS.HISTORY}_${userId}`);
+                if (savedHistory) {
+                    history = JSON.parse(savedHistory);
+                    updateHistory();
+                }
+                
+                console.log('Данные пользователя загружены');
+            } catch (error) {
+                console.error('Ошибка при загрузке данных:', error);
+            }
+        }
+        
+        // Сохранение данных пользователя
+        function saveUserData(userId) {
+            try {
+                // Сохраняем баланс
+                localStorage.setItem(`${STORAGE_KEYS.BALANCE}_${userId}`, balance.toString());
+                
+                // Сохраняем статистику
+                localStorage.setItem(`${STORAGE_KEYS.STATS}_${userId}`, JSON.stringify(stats));
+                
+                // Сохраняем историю (только последние 20 записей)
+                const historyToSave = history.slice(0, 20);
+                localStorage.setItem(`${STORAGE_KEYS.HISTORY}_${userId}`, JSON.stringify(historyToSave));
+                
+                console.log('Данные пользователя сохранены');
+            } catch (error) {
+                console.error('Ошибка при сохранении данных:', error);
+            }
+        }
+        
+        // Обновление баланса
+        function updateBalance() {
+            balanceElement.textContent = balance;
+            
+            // Обновляем максимальную ставку в поле ввода
+            betInput.max = balance;
+            
+            // Сохраняем данные
+            if (userData && userData.id) {
+                saveUserData(userData.id);
+            } else {
+                saveUserData('local_user');
+            }
+        }
+        
+        // Обновление ставки
+        function updateBet() {
+            betElement.textContent = currentBet;
+            betInput.value = currentBet;
+            
+            // Обновляем активную кнопку быстрой ставки
+            document.querySelectorAll('.quick-bet').forEach(bet => {
+                if (parseInt(bet.dataset.bet) === currentBet) {
+                    bet.classList.add('active');
+                } else {
+                    bet.classList.remove('active');
                 }
             });
         }
         
-        // Функция вращения барабана (оптимизированная для мобильных)
+        // Обновление статистики
+        function updateStats() {
+            totalGamesElement.textContent = stats.totalGames;
+            totalWinsElement.textContent = stats.totalWins;
+            totalLossesElement.textContent = stats.totalLosses;
+            totalWinAmountElement.textContent = stats.totalWinAmount;
+            maxWinElement.textContent = stats.maxWin;
+            
+            // Рассчитываем процент побед
+            const winRate = stats.totalGames > 0 ? Math.round((stats.totalWins / stats.totalGames) * 100) : 0;
+            winRateElement.textContent = `${winRate}%`;
+            
+            // Сохраняем статистику
+            if (userData && userData.id) {
+                saveUserData(userData.id);
+            } else {
+                saveUserData('local_user');
+            }
+        }
+        
+        // Обновление истории
+        function updateHistory() {
+            historyList.innerHTML = '';
+            
+            if (history.length === 0) {
+                historyList.innerHTML = '<div style="text-align: center; color: #aaa; padding: 10px;">История игр пуста</div>';
+                return;
+            }
+            
+            history.forEach(item => {
+                const historyElement = document.createElement('div');
+                historyElement.className = `history-item ${item.win > 0 ? 'win-item' : 'loss-item'}`;
+                
+                const time = item.time || '--:--';
+                const symbolsText = item.symbols?.join(' ') || '---';
+                const resultText = item.win > 0 ? `+${item.win}` : `-${item.bet}`;
+                
+                historyElement.innerHTML = `
+                    <span>${time}</span>
+                    <span>${symbolsText}</span>
+                    <span>${resultText}</span>
+                `;
+                
+                historyList.appendChild(historyElement);
+            });
+        }
+        
+        // Вращение барабана
         function spinReel(reelElement) {
             return new Promise(resolve => {
                 let spinCount = 0;
-                const maxSpins = 15 + Math.floor(Math.random() * 8); // Меньше вращений для скорости
+                const maxSpins = 15 + Math.floor(Math.random() * 8);
                 
                 const spinInterval = setInterval(() => {
-                    // Генерация случайного символа
                     const randomSymbol = symbols[Math.floor(Math.random() * symbols.length)];
                     reelElement.querySelector('.reel-content').textContent = randomSymbol;
                     
@@ -656,11 +1017,11 @@
                         clearInterval(spinInterval);
                         resolve();
                     }
-                }, 60); // Немного медленнее для плавности на мобильных
+                }, 60);
             });
         }
         
-        // Функция определения выигрыша
+        // Определение выигрыша
         function calculateWin(symbols) {
             const [s1, s2, s3] = symbols;
             
@@ -672,6 +1033,16 @@
             // Проверка на 3 звезды
             if (s1 === '⭐' && s2 === '⭐' && s3 === '⭐') {
                 return {multiplier: 50, message: "Отлично! 3 звезды!"};
+            }
+            
+            // Проверка на 3 алмаза
+            if (s1 === '💎' && s2 === '💎' && s3 === '💎') {
+                return {multiplier: 30, message: "Бриллиантовая удача! 💎💎💎"};
+            }
+            
+            // Проверка на 3 короны
+            if (s1 === '👑' && s2 === '👑' && s3 === '👑') {
+                return {multiplier: 20, message: "Королевская комбинация! 👑👑👑"};
             }
             
             // Проверка на 3 вишни
@@ -693,7 +1064,7 @@
             return {multiplier: 0, message: "Попробуйте еще раз!"};
         }
         
-        // Основная функция вращения (оптимизированная)
+        // Основная функция вращения
         async function spin() {
             if (isSpinning) return;
             
@@ -704,16 +1075,23 @@
                 return;
             }
             
+            // Проверка минимальной ставки
+            if (currentBet < 1) {
+                gameMessage.textContent = "Минимальная ставка: 1";
+                gameMessage.style.color = "#ff3838";
+                return;
+            }
+            
             isSpinning = true;
             balance -= currentBet;
-            updateUI();
+            updateBalance();
             
             // Добавляем класс вращения
             reels.forEach(reel => {
                 reel.classList.add('spinning');
             });
             
-            // Вращение каждого барабана с небольшой задержкой между ними
+            // Вращение каждого барабана
             const finalSymbols = [];
             
             for (let i = 0; i < reels.length; i++) {
@@ -749,9 +1127,20 @@
             const winResult = calculateWin(finalSymbols);
             const winAmount = currentBet * winResult.multiplier;
             
+            // Обновление статистики
+            stats.totalGames++;
+            
             if (winAmount > 0) {
                 balance += winAmount;
                 lastWin = winAmount;
+                stats.totalWins++;
+                stats.totalWinAmount += winAmount;
+                
+                // Обновляем максимальный выигрыш
+                if (winAmount > stats.maxWin) {
+                    stats.maxWin = winAmount;
+                }
+                
                 gameMessage.textContent = winResult.message + ` Выигрыш: ${winAmount}!`;
                 gameMessage.style.color = "#4cd137";
                 
@@ -767,9 +1156,14 @@
                 }, 1500);
             } else {
                 lastWin = 0;
+                stats.totalLosses++;
                 gameMessage.textContent = winResult.message;
                 gameMessage.style.color = "#ff9f1a";
             }
+            
+            // Обновление интерфейса
+            winElement.textContent = lastWin;
+            updateStats();
             
             // Добавление в историю
             const historyItem = {
@@ -780,13 +1174,11 @@
             };
             
             history.unshift(historyItem);
-            if (history.length > 5) history.pop();
+            if (history.length > 20) history.pop();
             
             // Обновление истории на экране
             updateHistory();
             
-            // Обновление интерфейса
-            updateUI();
             isSpinning = false;
             
             // Если включен автоспин, запускаем следующий спин
@@ -799,29 +1191,7 @@
             }
         }
         
-        // Функция обновления истории
-        function updateHistory() {
-            historyList.innerHTML = '';
-            
-            history.forEach(item => {
-                const historyElement = document.createElement('div');
-                historyElement.className = `history-item ${item.win > 0 ? 'win-item' : 'loss-item'}`;
-                
-                // Форматируем время и результат
-                const symbolsText = item.symbols.join(' ');
-                const resultText = item.win > 0 ? `+${item.win}` : `-${item.bet}`;
-                
-                historyElement.innerHTML = `
-                    <span>${item.time}</span>
-                    <span>${symbolsText}</span>
-                    <span>${resultText}</span>
-                `;
-                
-                historyList.appendChild(historyElement);
-            });
-        }
-        
-        // Функция переключения автоспина
+        // Переключение автоспина
         function toggleAutoSpin() {
             autoSpin = !autoSpin;
             
@@ -839,12 +1209,89 @@
             }
         }
         
+        // Установка максимальной ставки
+        function setMaxBet() {
+            currentBet = balance;
+            updateBet();
+            betInput.value = currentBet;
+        }
+        
+        // Обработка ввода ставки
+        function handleBetInput() {
+            let value = parseInt(betInput.value);
+            
+            // Проверка на корректность ввода
+            if (isNaN(value) || value < 1) {
+                value = 1;
+            }
+            
+            if (value > balance) {
+                value = balance;
+            }
+            
+            // Ограничение максимальной ставки
+            if (value > 10000) {
+                value = 10000;
+            }
+            
+            currentBet = value;
+            updateBet();
+        }
+        
+        // Переключение между разделами
+        function switchSection(section) {
+            // Скрываем все разделы
+            gameSection.style.display = 'none';
+            helpSection.classList.remove('active');
+            statsSection.classList.remove('active');
+            
+            // Показываем выбранный раздел
+            if (section === 'game') {
+                gameSection.style.display = 'block';
+            } else if (section === 'help') {
+                helpSection.classList.add('active');
+            } else if (section === 'stats') {
+                statsSection.classList.add('active');
+            }
+            
+            // Обновляем активную кнопку навигации
+            navItems.forEach(item => {
+                if (item.dataset.section === section) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+        }
+        
+        // Сброс статистики
+        function resetStats() {
+            if (confirm("Вы уверены, что хотите сбросить статистику? Это действие нельзя отменить.")) {
+                stats = {
+                    totalGames: 0,
+                    totalWins: 0,
+                    totalLosses: 0,
+                    totalWinAmount: 0,
+                    maxWin: 0
+                };
+                
+                updateStats();
+                alert("Статистика сброшена!");
+            }
+        }
+        
         // Инициализация игры
         function initGame() {
-            updateUI();
+            // Инициализация Telegram
+            initTelegramApp();
+            
+            // Обновление интерфейса
+            updateBalance();
+            updateBet();
+            updateStats();
             updateHistory();
             
-            // Обработчик кнопки "Крутить" - touch и click
+            // Обработчик кнопки "Крутить"
             spinBtn.addEventListener('click', spin);
             spinBtn.addEventListener('touchstart', function(e) {
                 e.preventDefault();
@@ -858,23 +1305,52 @@
                 toggleAutoSpin();
             }, {passive: false});
             
-            // Обработчики выбора ставки
-            document.querySelectorAll('.bet-option').forEach(option => {
-                option.addEventListener('click', function() {
+            // Обработчик поля ввода ставки
+            betInput.addEventListener('input', handleBetInput);
+            betInput.addEventListener('change', handleBetInput);
+            
+            // Обработчик кнопки "MAX"
+            maxBetBtn.addEventListener('click', setMaxBet);
+            maxBetBtn.addEventListener('touchstart', function(e) {
+                e.preventDefault();
+                setMaxBet();
+            }, {passive: false});
+            
+            // Обработчики быстрых ставок
+            document.querySelectorAll('.quick-bet').forEach(bet => {
+                bet.addEventListener('click', function() {
                     if (isSpinning) return;
                     
                     currentBet = parseInt(this.dataset.bet);
-                    updateUI();
+                    updateBet();
                 });
                 
-                option.addEventListener('touchstart', function(e) {
+                bet.addEventListener('touchstart', function(e) {
                     e.preventDefault();
                     if (isSpinning) return;
                     
                     currentBet = parseInt(this.dataset.bet);
-                    updateUI();
+                    updateBet();
                 }, {passive: false});
             });
+            
+            // Обработчики навигации
+            navItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const section = this.dataset.section;
+                    switchSection(section);
+                });
+                
+                item.addEventListener('touchstart', function(e) {
+                    e.preventDefault();
+                    const section = this.dataset.section;
+                    switchSection(section);
+                }, {passive: false});
+            });
+            
+            // Обработчик кнопки сброса статистики
+            resetStatsBtn.addEventListener('click', resetStats);
             
             // Добавление анимации к барабанам при загрузке
             setTimeout(() => {
@@ -892,62 +1368,33 @@
             
             // Обработка изменения ориентации экрана
             window.addEventListener('orientationchange', function() {
-                // Небольшая задержка для обновления layout
                 setTimeout(() => {
-                    // Перерисовка для адаптации под новую ориентацию
-                    updateUI();
+                    updateBalance();
                 }, 300);
             });
             
             // Предотвращение контекстного меню на кнопках
             document.addEventListener('contextmenu', function(e) {
                 if (e.target.classList.contains('btn') || 
-                    e.target.classList.contains('bet-option') ||
+                    e.target.classList.contains('quick-bet') ||
+                    e.target.classList.contains('nav-item') ||
                     e.target.classList.contains('reel')) {
                     e.preventDefault();
+                }
+            });
+            
+            // Обработка видимости страницы для автоспина
+            document.addEventListener('visibilitychange', function() {
+                if (document.hidden && autoSpin) {
+                    toggleAutoSpin();
+                    gameMessage.textContent = "Автоспин приостановлен (страница неактивна)";
+                    gameMessage.style.color = "#ff9f1a";
                 }
             });
         }
         
         // Запуск игры при загрузке страницы
         window.addEventListener('DOMContentLoaded', initGame);
-        
-        // Добавление эффектов при касании на барабаны
-        reels.forEach(reel => {
-            // Для touch устройств
-            reel.addEventListener('touchstart', function() {
-                if (!isSpinning) {
-                    this.style.boxShadow = '0 0 15px #ffd32a';
-                }
-            });
-            
-            reel.addEventListener('touchend', function() {
-                this.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.7)';
-            });
-            
-            // Для десктопов
-            reel.addEventListener('mouseenter', function() {
-                if (!isSpinning) {
-                    this.style.boxShadow = '0 0 15px #ffd32a';
-                }
-            });
-            
-            reel.addEventListener('mouseleave', function() {
-                this.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.7)';
-            });
-        });
-        
-        // Оптимизация для экономии заряда батареи
-        document.addEventListener('visibilitychange', function() {
-            if (document.hidden) {
-                // Если страница скрыта, останавливаем автоспин
-                if (autoSpin) {
-                    toggleAutoSpin();
-                    gameMessage.textContent = "Автоспин приостановлен (страница неактивна)";
-                    gameMessage.style.color = "#ff9f1a";
-                }
-            }
-        });
     </script>
 </body>
 </html>
