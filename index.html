@@ -3,1959 +3,1721 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Казино "Ракетка" - Депозит по промокодам</title>
+    <title>KalorieSnap - Анализатор калорий по фото</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Telegram Web App SDK -->
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Сброс стилей и базовые настройки */
+        :root {
+            --primary: #4CAF50;
+            --primary-dark: #388E3C;
+            --primary-light: #C8E6C9;
+            --accent: #FF9800;
+            --accent-dark: #F57C00;
+            --background: #F5F7FA;
+            --surface: #FFFFFF;
+            --text-primary: #212121;
+            --text-secondary: #757575;
+            --text-disabled: #9E9E9E;
+            --border: #E0E0E0;
+            --error: #F44336;
+            --success: #4CAF50;
+            --shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            --shadow-hover: 0 6px 20px rgba(0, 0, 0, 0.12);
+            --radius: 16px;
+            --radius-sm: 8px;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-            -webkit-text-size-adjust: 100%;
         }
-        
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            background: linear-gradient(135deg, #0a1931 0%, #0c2461 100%);
-            color: white;
-            min-height: 100vh;
-            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background);
+            color: var(--text-primary);
+            line-height: 1.6;
+            max-width: 100vw;
             overflow-x: hidden;
-            touch-action: manipulation;
         }
-        
-        .container {
-            max-width: 100%;
+
+        .app-container {
+            max-width: 500px;
             margin: 0 auto;
-            padding: 15px;
-            padding-bottom: 80px; /* Отступ для нижнего меню */
-        }
-        
-        /* Шапка - оптимизирована для мобильных */
-        header {
-            text-align: center;
-            padding: 10px 0 15px;
-            margin-bottom: 10px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .logo-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 8px;
-        }
-        
-        .logo {
-            font-size: 2.2rem;
-            color: #ff3838;
-            animation: pulse 2s infinite;
-        }
-        
-        h1 {
-            font-size: 1.8rem;
-            margin: 0;
-            background: linear-gradient(to right, #ff9f1a, #ff3838);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            line-height: 1.2;
-        }
-        
-        .subtitle {
-            font-size: 0.9rem;
-            color: #aaa;
-            margin-bottom: 5px;
-            line-height: 1.3;
-        }
-        
-        /* Профиль пользователя - расширенный */
-        .profile-card {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 15px;
-            margin-bottom: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-        
-        .profile-header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-        
-        .profile-avatar {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            overflow: hidden;
-            border: 3px solid #ff9f1a;
+            background-color: var(--surface);
+            min-height: 100vh;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.05);
             position: relative;
         }
-        
-        .avatar-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 20px 24px;
+            text-align: center;
+            border-radius: 0 0 var(--radius) var(--radius);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
-        
-        .avatar-placeholder {
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.8rem;
-            font-weight: bold;
+            gap: 12px;
+            margin-bottom: 8px;
         }
-        
-        .profile-info {
-            flex: 1;
-        }
-        
-        .profile-name {
-            font-weight: bold;
-            font-size: 1.2rem;
-            margin-bottom: 5px;
-        }
-        
-        .profile-id {
+
+        .header p {
             font-size: 0.9rem;
-            color: #aaa;
-            margin-bottom: 5px;
+            opacity: 0.9;
+            font-weight: 300;
         }
-        
-        .profile-status {
-            display: inline-block;
-            background: rgba(76, 209, 55, 0.2);
-            color: #4cd137;
-            padding: 3px 8px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-        }
-        
-        .profile-stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-top: 15px;
-        }
-        
-        .stat-item {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            padding: 10px;
-            text-align: center;
-        }
-        
-        .stat-value {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: #ff9f1a;
-            margin-bottom: 3px;
-        }
-        
-        .stat-label {
-            font-size: 0.8rem;
-            color: #aaa;
-        }
-        
-        /* Игровой автомат */
-        .slot-machine {
-            background: rgba(26, 26, 46, 0.9);
-            border-radius: 15px;
-            padding: 15px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            width: 100%;
-            margin-bottom: 15px;
-        }
-        
-        .slot-title {
-            text-align: center;
-            margin-bottom: 15px;
-            font-size: 1.3rem;
-            color: #ff9f1a;
-        }
-        
-        /* Дисплей слота */
-        .slot-display {
-            background-color: rgba(10, 10, 20, 0.9);
-            border-radius: 12px;
-            padding: 12px;
+
+        .nav-tabs {
             display: flex;
             justify-content: space-around;
-            margin-bottom: 20px;
-            border: 4px solid #3c40c6;
-            box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.8), 0 5px 15px rgba(0, 0, 0, 0.5);
+            background-color: var(--surface);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 100px;
+            z-index: 99;
         }
-        
-        .reel {
-            width: 70px;
-            height: 70px;
-            background: linear-gradient(145deg, #2d3436, #1e272e);
-            border-radius: 10px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 2.8rem;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.7);
-            overflow: hidden;
+
+        .nav-tab {
+            flex: 1;
+            text-align: center;
+            padding: 18px 0;
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s ease;
             position: relative;
-            border: 2px solid #575fcf;
+            font-size: 0.95rem;
         }
-        
-        .reel-content {
+
+        .nav-tab.active {
+            color: var(--primary);
+        }
+
+        .nav-tab.active::after {
+            content: '';
             position: absolute;
-            width: 100%;
-            text-align: center;
-        }
-        
-        /* Панель баланса и ставок */
-        .balance-panel {
-            background: rgba(26, 26, 46, 0.9);
-            border-radius: 15px;
-            padding: 15px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            width: 100%;
-            margin-bottom: 15px;
-        }
-        
-        .balance, .bet, .win {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            font-size: 0.95rem;
-        }
-        
-        .value {
-            font-weight: bold;
-            font-size: 1.2rem;
-            color: #ff9f1a;
-            text-shadow: 0 0 8px rgba(255, 211, 42, 0.5);
-        }
-        
-        /* Поле для ввода ставки */
-        .bet-input-container {
-            margin: 15px 0;
-        }
-        
-        .bet-input-label {
-            display: block;
-            margin-bottom: 8px;
-            color: #ff9f1a;
-            font-size: 1rem;
-        }
-        
-        .bet-input-wrapper {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .bet-input {
-            flex: 1;
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid #3c40c6;
-            border-radius: 10px;
-            padding: 12px 15px;
-            color: white;
-            font-size: 1.1rem;
-            text-align: center;
-            outline: none;
-        }
-        
-        .bet-input:focus {
-            border-color: #ff9f1a;
-            box-shadow: 0 0 10px rgba(255, 159, 26, 0.5);
-        }
-        
-        .max-bet-btn {
-            background: linear-gradient(to right, #3c40c6, #575fcf);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            padding: 0 15px;
-            font-weight: bold;
-            cursor: pointer;
-            min-width: 60px;
-        }
-        
-        /* Быстрые ставки */
-        .quick-bets {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            margin-top: 15px;
-        }
-        
-        .quick-bet {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            padding: 12px 5px;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-align: center;
-            border: 2px solid transparent;
-            font-size: 0.95rem;
-        }
-        
-        .quick-bet:active {
-            transform: scale(0.95);
-        }
-        
-        .quick-bet.active {
-            background: linear-gradient(to right, #3c40c6, #ff3838);
-            border-color: #ff9f1a;
-            box-shadow: 0 0 10px rgba(255, 56, 56, 0.5);
-        }
-        
-        /* Кнопки управления */
-        .controls {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-top: 20px;
-        }
-        
-        .btn {
-            padding: 16px 20px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            min-height: 55px;
-            width: 100%;
-        }
-        
-        .btn:active {
-            transform: translateY(3px);
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-        }
-        
-        .spin-btn {
-            background: linear-gradient(to right, #ff3838, #ff9f1a);
-            color: white;
-        }
-        
-        .auto-btn {
-            background: linear-gradient(to right, #3c40c6, #575fcf);
-            color: white;
-        }
-        
-        .deposit-btn {
-            background: linear-gradient(to right, #4cd137, #2ecc71);
-            color: white;
-        }
-        
-        /* Нижнее меню навигации */
-        .bottom-nav {
-            position: fixed;
             bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(26, 26, 46, 0.95);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            display: flex;
-            padding: 10px 0;
-            z-index: 1000;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 3px;
+            background-color: var(--primary);
+            border-radius: 3px 3px 0 0;
         }
-        
-        .nav-item {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 8px 5px;
-            color: #aaa;
-            text-decoration: none;
-            font-size: 0.8rem;
-            transition: all 0.2s;
+
+        .tab-content {
+            display: none;
+            padding: 24px;
+            animation: fadeIn 0.3s ease;
         }
-        
-        .nav-item:active {
-            color: #ff9f1a;
-        }
-        
-        .nav-item.active {
-            color: #ff9f1a;
-        }
-        
-        .nav-icon {
-            font-size: 1.2rem;
-            margin-bottom: 4px;
-        }
-        
-        /* Сообщения */
-        .game-message {
-            text-align: center;
-            color: #ff9f1a;
-            font-size: 1.1rem;
-            margin-top: 15px;
-            padding: 12px;
-            border-radius: 10px;
-            background: rgba(0, 0, 0, 0.3);
-            min-height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        /* История */
-        .history {
-            margin-top: 20px;
-            padding: 15px;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 10px;
-            max-height: 200px;
-            overflow-y: auto;
-        }
-        
-        .history-title {
-            margin-bottom: 10px;
-            color: #ff9f1a;
-            font-size: 1rem;
-        }
-        
-        .history-item {
-            padding: 5px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            font-size: 0.85rem;
-            display: flex;
-            justify-content: space-between;
-        }
-        
-        .win-item {
-            color: #4cd137;
-        }
-        
-        .loss-item {
-            color: #e84118;
-        }
-        
-        /* Раздел пополнения баланса (депозит) */
-        .deposit-section {
-            background: rgba(26, 26, 46, 0.9);
-            border-radius: 15px;
-            padding: 15px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            width: 100%;
-            margin-bottom: 15px;
-            display: none; /* Скрыто по умолчанию */
-        }
-        
-        .deposit-section.active {
+
+        .tab-content.active {
             display: block;
         }
-        
-        .deposit-title {
-            text-align: center;
-            margin-bottom: 15px;
-            font-size: 1.3rem;
-            color: #ff9f1a;
-        }
-        
-        .promo-input-container {
-            margin: 20px 0;
-        }
-        
-        .promo-input-label {
-            display: block;
-            margin-bottom: 10px;
-            color: #ff9f1a;
-            font-size: 1rem;
-            text-align: center;
-        }
-        
-        .promo-input-wrapper {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .promo-input {
-            flex: 1;
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid #3c40c6;
-            border-radius: 10px;
-            padding: 12px 15px;
-            color: white;
-            font-size: 1.1rem;
-            text-align: center;
-            outline: none;
-            text-transform: uppercase;
-        }
-        
-        .promo-input:focus {
-            border-color: #ff9f1a;
-            box-shadow: 0 0 10px rgba(255, 159, 26, 0.5);
-        }
-        
-        .apply-promo-btn {
-            background: linear-gradient(to right, #4cd137, #2ecc71);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            padding: 0 20px;
-            font-weight: bold;
-            cursor: pointer;
-            min-width: 80px;
-        }
-        
-        .promo-codes {
-            margin-top: 20px;
-        }
-        
-        .promo-codes-title {
-            text-align: center;
-            margin-bottom: 10px;
-            color: #ff9f1a;
-            font-size: 1rem;
-        }
-        
-        .promo-list {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-        }
-        
-        .promo-item {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-            padding: 10px;
-            text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .promo-code {
-            font-weight: bold;
-            font-size: 1.1rem;
-            color: #ff9f1a;
-            margin-bottom: 5px;
-        }
-        
-        .promo-reward {
-            font-size: 0.9rem;
-            color: #4cd137;
-        }
-        
-        .promo-used {
-            font-size: 0.8rem;
-            color: #e84118;
-            margin-top: 5px;
-        }
-        
-        /* История депозитов */
-        .deposit-history {
-            margin-top: 20px;
-            padding: 15px;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 10px;
-            max-height: 150px;
-            overflow-y: auto;
-        }
-        
-        .deposit-history-title {
-            margin-bottom: 10px;
-            color: #ff9f1a;
-            font-size: 1rem;
-        }
-        
-        .deposit-item {
-            padding: 5px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            font-size: 0.85rem;
-            display: flex;
-            justify-content: space-between;
-        }
-        
-        .deposit-success {
-            color: #4cd137;
-        }
-        
-        /* Помощь и правила */
-        .help {
-            margin-top: 20px;
-            background: rgba(0, 0, 0, 0.2);
-            padding: 15px;
-            border-radius: 12px;
-            width: 100%;
-            display: none; /* Скрыто по умолчанию */
-        }
-        
-        .help.active {
-            display: block;
-        }
-        
-        .help h3 {
-            color: #ff9f1a;
-            margin-bottom: 10px;
-            font-size: 1.1rem;
-        }
-        
-        .rules {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 10px;
-        }
-        
-        .rule {
-            background: rgba(60, 64, 198, 0.2);
-            padding: 10px;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            line-height: 1.4;
-        }
-        
-        /* Статистика */
-        .stats {
-            margin-top: 20px;
-            background: rgba(0, 0, 0, 0.2);
-            padding: 15px;
-            border-radius: 12px;
-            width: 100%;
-            display: none; /* Скрыто по умолчанию */
-        }
-        
-        .stats.active {
-            display: block;
-        }
-        
-        .stats h3 {
-            color: #ff9f1a;
-            margin-bottom: 10px;
-            font-size: 1.1rem;
-        }
-        
-        .stat-item {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        /* Анимации */
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        @keyframes win-glow {
-            0%, 100% { box-shadow: 0 0 5px #4cd137; }
-            50% { box-shadow: 0 0 20px #4cd137; }
-        }
-        
-        @keyframes success {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-        
-        .reel.spinning {
-            animation: spin 0.1s linear infinite;
-        }
-        
-        .reel.win {
-            animation: win-glow 0.5s 3;
-        }
-        
-        .success-animation {
-            animation: success 0.5s ease-in-out;
-        }
-        
-        /* Адаптация для планшетов */
-        @media (min-width: 768px) {
-            .container {
-                max-width: 500px;
-                margin: 0 auto;
-            }
-            
-            .reel {
-                width: 100px;
-                height: 100px;
-                font-size: 4rem;
-            }
-            
-            .quick-bets {
-                grid-template-columns: repeat(6, 1fr);
-            }
-            
-            .rules {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .promo-list {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-        
-        /* Адаптация для горизонтальной ориентации */
-        @media (orientation: landscape) and (max-height: 600px) {
-            .container {
-                padding-bottom: 60px;
-            }
-            
-            .slot-display {
-                padding: 8px;
-            }
-            
-            .reel {
-                width: 60px;
-                height: 60px;
-                font-size: 2.5rem;
-            }
-            
-            .balance-panel, .slot-machine {
-                padding: 10px;
-            }
-        }
-        
-        /* Стили для Telegram Web App */
-        .tg-background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: var(--tg-theme-bg-color, #0a1931);
-            z-index: -1;
-        }
-        
-        /* Предотвращение выделения текста при касании */
-        .btn, .quick-bet, .nav-item, .reel {
-            user-select: none;
-            -webkit-user-select: none;
-        }
-        
-        /* Скрыть полосу прокрутки в некоторых браузерах */
-        .history::-webkit-scrollbar,
-        .deposit-history::-webkit-scrollbar {
-            width: 4px;
-        }
-        
-        .history::-webkit-scrollbar-track,
-        .deposit-history::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 2px;
-        }
-        
-        .history::-webkit-scrollbar-thumb,
-        .deposit-history::-webkit-scrollbar-thumb {
-            background: #ff9f1a;
-            border-radius: 2px;
-        }
-        
-        /* Анимация появления */
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        
-        .fade-in {
-            animation: fadeIn 0.3s ease-out;
+
+        /* Стили для экрана сканирования */
+        .scan-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 24px;
         }
-        
-        /* Уведомление */
-        .notification {
-            position: fixed;
-            top: 20px;
+
+        .daily-progress {
+            width: 100%;
+            background-color: var(--surface);
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            margin-bottom: 16px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .progress-header h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .progress-circle {
+            position: relative;
+            width: 180px;
+            height: 180px;
+            margin: 0 auto 16px;
+        }
+
+        .progress-circle svg {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+
+        .progress-circle-bg {
+            fill: none;
+            stroke: var(--primary-light);
+            stroke-width: 8;
+        }
+
+        .progress-circle-fill {
+            fill: none;
+            stroke: var(--primary);
+            stroke-width: 8;
+            stroke-linecap: round;
+            stroke-dasharray: 472;
+            stroke-dashoffset: 472;
+            transition: stroke-dashoffset 1s ease;
+        }
+
+        .progress-text {
+            position: absolute;
+            top: 50%;
             left: 50%;
-            transform: translateX(-50%);
-            background: rgba(26, 26, 46, 0.95);
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .progress-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            line-height: 1;
+        }
+
+        .progress-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        .scan-button {
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
-            padding: 12px 20px;
-            border-radius: 10px;
-            border-left: 4px solid #4cd137;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            z-index: 1001;
+            border: none;
+            border-radius: var(--radius);
+            padding: 22px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+        }
+
+        .scan-button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .scan-button:active {
+            transform: translateY(0);
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .preview-container {
+            width: 100%;
+            height: 300px;
+            border-radius: var(--radius);
+            overflow: hidden;
+            position: relative;
+            background-color: #f8f9fa;
+            border: 2px dashed var(--border);
+            display: none;
+            box-shadow: var(--shadow);
+        }
+
+        .preview-container.active {
+            display: block;
+        }
+
+        .preview-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .analyze-button {
+            width: 100%;
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+            color: white;
+            border: none;
+            border-radius: var(--radius);
+            padding: 18px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+            display: none;
+        }
+
+        .analyze-button.active {
+            display: block;
+        }
+
+        .analyze-button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .result-container {
+            width: 100%;
+            background-color: var(--surface);
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: var(--shadow);
+            margin-top: 20px;
+            display: none;
+        }
+
+        .result-container.active {
+            display: block;
+            animation: slideUp 0.5s ease;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .result-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .calorie-value {
+            font-size: 3rem;
+            font-weight: 800;
+            text-align: center;
+            color: var(--primary);
+            margin: 20px 0;
+        }
+
+        .nutrition-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin: 24px 0;
+        }
+
+        .nutrition-item {
+            background-color: var(--background);
+            border-radius: var(--radius-sm);
+            padding: 16px;
+            text-align: center;
+        }
+
+        .nutrition-value {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .nutrition-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .food-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            text-align: center;
+            margin: 16px 0;
+            color: var(--text-primary);
+        }
+
+        .history-item {
+            background-color: var(--surface);
+            border-radius: var(--radius);
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            transition: transform 0.3s ease;
+        }
+
+        .history-item:hover {
+            transform: translateY(-2px);
+        }
+
+        .history-image {
+            width: 70px;
+            height: 70px;
+            border-radius: var(--radius-sm);
+            object-fit: cover;
+        }
+
+        .history-info {
+            flex: 1;
+        }
+
+        .history-food {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .history-calories {
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .history-date {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* Стили для экрана профиля */
+        .profile-container {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: white;
+            box-shadow: var(--shadow);
+        }
+
+        .profile-info h2 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .profile-info p {
+            color: var(--text-secondary);
+        }
+
+        .form-section {
+            background-color: var(--surface);
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: var(--shadow);
+        }
+
+        .form-section h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--primary);
             display: flex;
             align-items: center;
             gap: 10px;
-            max-width: 90%;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            display: none;
         }
-        
-        .notification.show {
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .select-wrapper {
+            position: relative;
+        }
+
+        .select-wrapper::after {
+            content: '\f078';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            pointer-events: none;
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            appearance: none;
+            background-color: white;
+        }
+
+        .radio-group {
             display: flex;
-            animation: fadeIn 0.3s ease-out;
+            gap: 20px;
+            margin-top: 8px;
         }
-        
-        .notification.error {
-            border-left-color: #e84118;
+
+        .radio-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
         }
-        
-        .notification.warning {
-            border-left-color: #ff9f1a;
+
+        .radio-input {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--primary);
         }
-        
-        .notification-icon {
+
+        .calorie-norm {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border-radius: var(--radius);
+            padding: 24px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            margin-top: 20px;
+        }
+
+        .calorie-norm h3 {
+            color: white;
+            margin-bottom: 12px;
             font-size: 1.2rem;
+        }
+
+        .calorie-norm-value {
+            font-size: 3rem;
+            font-weight: 800;
+            margin: 10px 0;
+        }
+
+        .save-button {
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            border-radius: var(--radius);
+            padding: 18px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+            margin-top: 20px;
+        }
+
+        .save-button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        /* Стили для экрана дневника */
+        .diary-container {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .diary-date {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: var(--surface);
+            padding: 16px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .date-nav {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .date-button {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .date-button:hover {
+            background-color: var(--background);
+            border-color: var(--primary);
+        }
+
+        .current-date {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .meal-section {
+            background-color: var(--surface);
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .meal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .meal-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .meal-calories {
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .meal-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .meal-item:last-child {
+            border-bottom: none;
+        }
+
+        .meal-item-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .meal-item-name {
+            font-weight: 600;
+        }
+
+        .meal-item-details {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .meal-item-calories {
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .add-button {
+            width: 100%;
+            background-color: transparent;
+            color: var(--primary);
+            border: 2px dashed var(--border);
+            border-radius: var(--radius);
+            padding: 16px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .add-button:hover {
+            border-color: var(--primary);
+            background-color: rgba(76, 175, 80, 0.05);
+        }
+
+        .diary-summary {
+            background-color: var(--surface);
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+
+        .diary-total {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin: 10px 0;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            border-top: 1px solid var(--border);
+            margin-top: 40px;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--primary);
+            color: white;
+            padding: 16px 24px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-hover);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: slideInUp 0.3s ease;
+        }
+
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+
+        /* Адаптивность */
+        @media (max-width: 500px) {
+            .app-container {
+                border-radius: 0;
+            }
+            
+            .header {
+                border-radius: 0;
+            }
+            
+            .tab-content {
+                padding: 20px;
+            }
+            
+            .nutrition-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Фон для Telegram -->
-    <div class="tg-background"></div>
-    
-    <!-- Уведомление -->
-    <div class="notification" id="notification">
-        <div class="notification-icon" id="notificationIcon">✅</div>
-        <div id="notificationText">Уведомление</div>
-    </div>
-    
-    <div class="container">
-        <header>
-            <div class="logo-container">
-                <div class="logo"><i class="fas fa-rocket"></i></div>
-                <h1>Казино "Ракетка"</h1>
-            </div>
-            <p class="subtitle">Депозит по промокодам • Ваш профиль</p>
+    <div class="app-container">
+        <!-- Шапка приложения -->
+        <header class="header">
+            <h1><i class="fas fa-apple-alt"></i> KalorieSnap</h1>
+            <p>Считайте калории по фото мгновенно</p>
         </header>
-        
-        <!-- Профиль пользователя -->
-        <div class="profile-card" id="profileCard">
-            <div class="profile-header">
-                <div class="profile-avatar" id="profileAvatar">
-                    <div class="avatar-placeholder" id="avatarPlaceholder">U</div>
-                    <img src="" alt="" class="avatar-image" id="avatarImage" style="display: none;">
-                </div>
-                <div class="profile-info">
-                    <div class="profile-name" id="userName">Загрузка...</div>
-                    <div class="profile-id">ID: <span id="userId">000000</span></div>
-                    <div class="profile-status">Онлайн</div>
-                </div>
+
+        <!-- Навигационные вкладки -->
+        <div class="nav-tabs">
+            <div class="nav-tab active" data-tab="scan">
+                <i class="fas fa-camera"></i> Сканировать
             </div>
-            
-            <div class="profile-stats">
-                <div class="stat-item">
-                    <div class="stat-value" id="balanceValue">1000</div>
-                    <div class="stat-label">Баланс</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value" id="totalWins">0</div>
-                    <div class="stat-label">Победы</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value" id="totalGames">0</div>
-                    <div class="stat-label">Игры</div>
-                </div>
+            <div class="nav-tab" data-tab="diary">
+                <i class="fas fa-book"></i> Дневник
+            </div>
+            <div class="nav-tab" data-tab="profile">
+                <i class="fas fa-user"></i> Профиль
             </div>
         </div>
-        
-        <!-- Основная игра (видна по умолчанию) -->
-        <div id="gameSection">
-            <div class="slot-machine">
-                <h2 class="slot-title">Космический слот-автомат</h2>
-                <div class="slot-display">
-                    <div class="reel" id="reel1">
-                        <div class="reel-content">🍒</div>
+
+        <!-- Контент вкладок -->
+        <main>
+            <!-- Вкладка сканирования -->
+            <div id="scan" class="tab-content active">
+                <div class="scan-container">
+                    <div class="daily-progress">
+                        <div class="progress-header">
+                            <h3>Прогресс за сегодня</h3>
+                            <span id="calories-consumed">0</span>/<span id="calorie-goal">2000</span> ккал
+                        </div>
+                        <div class="progress-circle">
+                            <svg>
+                                <circle class="progress-circle-bg" cx="90" cy="90" r="75"></circle>
+                                <circle id="progress-circle-fill" class="progress-circle-fill" cx="90" cy="90" r="75"></circle>
+                            </svg>
+                            <div class="progress-text">
+                                <div id="progress-percentage" class="progress-value">0%</div>
+                                <div class="progress-label">дневной нормы</div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="reel" id="reel2">
-                        <div class="reel-content">⭐</div>
-                    </div>
-                    <div class="reel" id="reel3">
-                        <div class="reel-content">🚀</div>
-                    </div>
-                </div>
-                
-                <div class="game-message" id="gameMessage">
-                    Добро пожаловать! Введите ставку и крутите барабаны!
-                </div>
-                
-                <div class="controls">
-                    <button class="btn spin-btn" id="spinBtn">
-                        <i class="fas fa-play"></i> Крутить барабаны
+
+                    <button id="scan-button" class="scan-button">
+                        <i class="fas fa-camera"></i> Сфотографировать еду
                     </button>
-                    <button class="btn auto-btn" id="autoSpinBtn">
-                        <i class="fas fa-sync-alt"></i> Авто-спин
+
+                    <input type="file" id="file-input" class="file-input" accept="image/*" capture="environment">
+
+                    <div id="preview-container" class="preview-container">
+                        <img id="preview-image" class="preview-image" src="" alt="Предпросмотр">
+                    </div>
+
+                    <button id="analyze-button" class="analyze-button">
+                        <span class="loading" id="analyze-loading"></span> Анализировать фото
+                    </button>
+
+                    <div id="result-container" class="result-container">
+                        <div class="result-header">
+                            <div class="result-title">Результаты анализа</div>
+                            <div id="result-close" style="cursor: pointer; color: var(--text-secondary);">
+                                <i class="fas fa-times"></i>
+                            </div>
+                        </div>
+                        <div id="food-name" class="food-name">Яблоко</div>
+                        <div id="calorie-value" class="calorie-value">95 ккал</div>
+                        <div class="nutrition-grid">
+                            <div class="nutrition-item">
+                                <div id="protein-value" class="nutrition-value">0.5г</div>
+                                <div class="nutrition-label">Белки</div>
+                            </div>
+                            <div class="nutrition-item">
+                                <div id="fat-value" class="nutrition-value">0.3г</div>
+                                <div class="nutrition-label">Жиры</div>
+                            </div>
+                            <div class="nutrition-item">
+                                <div id="carbs-value" class="nutrition-value">25г</div>
+                                <div class="nutrition-label">Углеводы</div>
+                            </div>
+                        </div>
+                        <button id="add-to-diary-button" class="save-button">
+                            <i class="fas fa-plus"></i> Добавить в дневник
+                        </button>
+                    </div>
+
+                    <div class="history-section">
+                        <h3 style="margin-bottom: 16px; font-size: 1.3rem;">История сканирований</h3>
+                        <div id="history-list">
+                            <!-- История будет добавлена динамически -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Вкладка дневника -->
+            <div id="diary" class="tab-content">
+                <div class="diary-container">
+                    <div class="diary-date">
+                        <div class="date-nav">
+                            <button id="prev-day" class="date-button">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <div id="current-date" class="current-date">Сегодня, 17 мая</div>
+                            <button id="next-day" class="date-button">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                        <div id="total-calories" class="calorie-norm-value">0 ккал</div>
+                    </div>
+
+                    <div class="meal-section">
+                        <div class="meal-header">
+                            <div class="meal-title">
+                                <i class="fas fa-sun"></i> Завтрак
+                            </div>
+                            <div id="breakfast-calories" class="meal-calories">0 ккал</div>
+                        </div>
+                        <div id="breakfast-items">
+                            <!-- Продукты завтрака будут добавлены динамически -->
+                            <div class="empty-state" style="text-align: center; color: var(--text-secondary); padding: 20px;">
+                                Нет продуктов. Добавьте что-нибудь!
+                            </div>
+                        </div>
+                        <button class="add-button" data-meal="breakfast">
+                            <i class="fas fa-plus"></i> Добавить продукт
+                        </button>
+                    </div>
+
+                    <div class="meal-section">
+                        <div class="meal-header">
+                            <div class="meal-title">
+                                <i class="fas fa-cloud-sun"></i> Обед
+                            </div>
+                            <div id="lunch-calories" class="meal-calories">0 ккал</div>
+                        </div>
+                        <div id="lunch-items">
+                            <div class="empty-state" style="text-align: center; color: var(--text-secondary); padding: 20px;">
+                                Нет продуктов. Добавьте что-нибудь!
+                            </div>
+                        </div>
+                        <button class="add-button" data-meal="lunch">
+                            <i class="fas fa-plus"></i> Добавить продукт
+                        </button>
+                    </div>
+
+                    <div class="meal-section">
+                        <div class="meal-header">
+                            <div class="meal-title">
+                                <i class="fas fa-moon"></i> Ужин
+                            </div>
+                            <div id="dinner-calories" class="meal-calories">0 ккал</div>
+                        </div>
+                        <div id="dinner-items">
+                            <div class="empty-state" style="text-align: center; color: var(--text-secondary); padding: 20px;">
+                                Нет продуктов. Добавьте что-нибудь!
+                            </div>
+                        </div>
+                        <button class="add-button" data-meal="dinner">
+                            <i class="fas fa-plus"></i> Добавить продукт
+                        </button>
+                    </div>
+
+                    <div class="diary-summary">
+                        <h3>Итого за день</h3>
+                        <div id="diary-total" class="diary-total">0 ккал</div>
+                        <div id="remaining-calories" style="color: var(--text-secondary); font-size: 1.1rem;">
+                            Осталось: <span id="remaining-value">2000</span> ккал
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Вкладка профиля -->
+            <div id="profile" class="tab-content">
+                <div class="profile-container">
+                    <div class="profile-header">
+                        <div class="profile-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="profile-info">
+                            <h2 id="profile-name">Иван Иванов</h2>
+                            <p id="profile-goal">Цель: Похудение</p>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3><i class="fas fa-user-edit"></i> Личные данные</h3>
+                        <div class="form-group">
+                            <label class="form-label">Имя</label>
+                            <input type="text" id="name-input" class="form-input" placeholder="Введите ваше имя" value="Иван">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Возраст</label>
+                                <input type="number" id="age-input" class="form-input" placeholder="Возраст" value="30" min="10" max="120">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Пол</label>
+                                <div class="select-wrapper">
+                                    <select id="gender-select" class="form-select">
+                                        <option value="male">Мужской</option>
+                                        <option value="female">Женский</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3><i class="fas fa-ruler-combined"></i> Антропометрия</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Рост (см)</label>
+                                <input type="number" id="height-input" class="form-input" placeholder="Рост" value="180" min="100" max="250">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Вес (кг)</label>
+                                <input type="number" id="weight-input" class="form-input" placeholder="Вес" value="80" min="30" max="300">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3><i class="fas fa-bullseye"></i> Цели</h3>
+                        <div class="form-group">
+                            <label class="form-label">Ваша цель</label>
+                            <div class="radio-group">
+                                <label class="radio-label">
+                                    <input type="radio" name="goal" value="loss" class="radio-input" checked>
+                                    <span>Похудение</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="goal" value="maintain" class="radio-input">
+                                    <span>Поддержание</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="goal" value="gain" class="radio-input">
+                                    <span>Набор массы</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Уровень активности</label>
+                            <div class="select-wrapper">
+                                <select id="activity-select" class="form-select">
+                                    <option value="1.2">Минимальный (сидячий образ жизни)</option>
+                                    <option value="1.375">Низкий (легкие тренировки 1-3 раза в неделю)</option>
+                                    <option value="1.55" selected>Средний (тренировки 3-5 раз в неделю)</option>
+                                    <option value="1.725">Высокий (интенсивные тренировки 6-7 раз в неделю)</option>
+                                    <option value="1.9">Очень высокий (тяжелая физическая работа + тренировки)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="calorie-norm">
+                        <h3>Ваша дневная норма калорий</h3>
+                        <div id="calorie-norm-value" class="calorie-norm-value">2250 ккал</div>
+                        <p>Для достижения вашей цели</p>
+                    </div>
+
+                    <button id="save-profile-button" class="save-button">
+                        <i class="fas fa-save"></i> Сохранить изменения
                     </button>
                 </div>
             </div>
-            
-            <div class="balance-panel">
-                <div class="balance">
-                    <span><i class="fas fa-wallet"></i> Баланс:</span>
-                    <span class="value" id="balanceDisplay">1000</span>
-                </div>
-                
-                <div class="bet">
-                    <span><i class="fas fa-coins"></i> Ставка:</span>
-                    <span class="value" id="betValue">10</span>
-                </div>
-                
-                <div class="win">
-                    <span><i class="fas fa-trophy"></i> Последний выигрыш:</span>
-                    <span class="value" id="winValue">0</span>
-                </div>
-                
-                <div class="bet-input-container">
-                    <label class="bet-input-label">Введите свою ставку:</label>
-                    <div class="bet-input-wrapper">
-                        <input type="number" class="bet-input" id="betInput" value="10" min="1" max="10000" step="1">
-                        <button class="max-bet-btn" id="maxBetBtn">MAX</button>
-                    </div>
-                </div>
-                
-                <div class="quick-bets">
-                    <div class="quick-bet active" data-bet="10">10</div>
-                    <div class="quick-bet" data-bet="50">50</div>
-                    <div class="quick-bet" data-bet="100">100</div>
-                    <div class="quick-bet" data-bet="200">200</div>
-                    <div class="quick-bet" data-bet="500">500</div>
-                    <div class="quick-bet" data-bet="1000">1000</div>
-                </div>
-                
-                <div class="history">
-                    <div class="history-title"><i class="fas fa-history"></i> История игр</div>
-                    <div id="historyList"></div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Раздел пополнения баланса (депозит) -->
-        <div class="deposit-section" id="depositSection">
-            <h2 class="deposit-title"><i class="fas fa-coins"></i> Пополнение баланса</h2>
-            
-            <div class="promo-input-container">
-                <label class="promo-input-label">Введите промокод для пополнения баланса:</label>
-                <div class="promo-input-wrapper">
-                    <input type="text" class="promo-input" id="promoInput" placeholder="ROCKET2024" maxlength="20">
-                    <button class="apply-promo-btn" id="applyPromoBtn">Применить</button>
-                </div>
-            </div>
-            
-            <div class="promo-codes">
-                <div class="promo-codes-title">Доступные промокоды:</div>
-                <div class="promo-list" id="promoList">
-                    <!-- Промокоды будут загружены через JavaScript -->
-                </div>
-            </div>
-            
-            <div class="deposit-history">
-                <div class="deposit-history-title"><i class="fas fa-history"></i> История пополнений</div>
-                <div id="depositHistoryList"></div>
-            </div>
-        </div>
-        
-        <!-- Помощь и правила (скрыто по умолчанию) -->
-        <div class="help" id="helpSection">
-            <h3><i class="fas fa-info-circle"></i> Правила игры</h3>
-            <div class="rules">
-                <div class="rule">
-                    <i class="fas fa-rocket"></i> <strong>3 ракетки:</strong> Джекпот! Выигрыш x100
-                </div>
-                <div class="rule">
-                    <i class="fas fa-star"></i> <strong>3 звезды:</strong> Выигрыш x50
-                </div>
-                <div class="rule">
-                    <i class="fas fa-lemon"></i> <strong>3 вишни:</strong> Выигрыш x20
-                </div>
-                <div class="rule">
-                    <i class="fas fa-gem"></i> <strong>3 алмаза:</strong> Выигрыш x30
-                </div>
-                <div class="rule">
-                    <i class="fas fa-crown"></i> <strong>3 короны:</strong> Выигрыш x20
-                </div>
-                <div class="rule">
-                    <i class="fas fa-random"></i> <strong>2 одинаковых:</strong> Выигрыш x2
-                </div>
-            </div>
-            
-            <h3 style="margin-top: 20px;"><i class="fas fa-gift"></i> Промокоды</h3>
-            <div class="rule">
-                Для пополнения баланса используйте промокоды. Вводите их в разделе "Пополнение". 
-                Каждый промокод можно использовать только один раз.
-            </div>
-        </div>
-        
-        <!-- Статистика (скрыто по умолчанию) -->
-        <div class="stats" id="statsSection">
-            <h3><i class="fas fa-chart-bar"></i> Статистика</h3>
-            <div class="stat-item">
-                <span>Всего сыграно игр:</span>
-                <span id="totalGamesStat">0</span>
-            </div>
-            <div class="stat-item">
-                <span>Побед:</span>
-                <span id="totalWinsStat">0</span>
-            </div>
-            <div class="stat-item">
-                <span>Проигрышей:</span>
-                <span id="totalLossesStat">0</span>
-            </div>
-            <div class="stat-item">
-                <span>Общий выигрыш:</span>
-                <span id="totalWinAmount">0</span>
-            </div>
-            <div class="stat-item">
-                <span>Максимальный выигрыш:</span>
-                <span id="maxWin">0</span>
-            </div>
-            <div class="stat-item">
-                <span>Процент побед:</span>
-                <span id="winRate">0%</span>
-            </div>
-            <div class="stat-item">
-                <span>Использовано промокодов:</span>
-                <span id="usedPromoCodes">0</span>
-            </div>
-            
-            <button class="btn spin-btn" id="resetStatsBtn" style="margin-top: 15px;">
-                <i class="fas fa-redo"></i> Сбросить статистику
-            </button>
-        </div>
-        
-        <!-- Нижнее меню навигации -->
-        <div class="bottom-nav">
-            <a href="#" class="nav-item active" data-section="game">
-                <div class="nav-icon"><i class="fas fa-gamepad"></i></div>
-                <div>Игра</div>
-            </a>
-            <a href="#" class="nav-item" data-section="deposit">
-                <div class="nav-icon"><i class="fas fa-coins"></i></div>
-                <div>Пополнение</div>
-            </a>
-            <a href="#" class="nav-item" data-section="stats">
-                <div class="nav-icon"><i class="fas fa-chart-bar"></i></div>
-                <div>Статистика</div>
-            </a>
-            <a href="#" class="nav-item" data-section="help">
-                <div class="nav-icon"><i class="fas fa-info-circle"></i></div>
-                <div>Помощь</div>
-            </a>
-        </div>
+        </main>
+
+        <footer class="footer">
+            <p>KalorieSnap © 2023 | Результаты являются оценочными</p>
+        </footer>
+    </div>
+
+    <!-- Уведомление -->
+    <div id="notification" class="notification" style="display: none;">
+        <i class="fas fa-check-circle"></i>
+        <span id="notification-text">Изменения сохранены!</span>
     </div>
 
     <script>
-        // Глобальные переменные
-        let balance = 1000;
-        let currentBet = 10;
-        let lastWin = 0;
-        let isSpinning = false;
-        let autoSpin = false;
+        // Основные переменные приложения
+        let currentTab = 'scan';
+        let dailyCalorieGoal = 2000;
+        let caloriesConsumed = 0;
         let history = [];
-        let depositHistory = [];
-        let userData = null;
-        
-        // Статистика
-        let stats = {
-            totalGames: 0,
-            totalWins: 0,
-            totalLosses: 0,
-            totalWinAmount: 0,
-            maxWin: 0,
-            usedPromoCodes: 0
+        let diary = {
+            today: {
+                breakfast: [],
+                lunch: [],
+                dinner: []
+            }
         };
-        
-        // Промокоды (в реальном приложении должны приходить с сервера)
-        const availablePromoCodes = [
-            { code: "ROCKET100", amount: 100, description: "Бонус новичка" },
-            { code: "CASINO200", amount: 200, description: "Промо-бонус" },
-            { code: "LUCKY500", amount: 500, description: "Удача" },
-            { code: "BIGWIN1000", amount: 1000, description: "Крупный выигрыш" },
-            { code: "JACKPOT2000", amount: 2000, description: "Джекпот" },
-            { code: "VIP5000", amount: 5000, description: "VIP статус" }
+        let currentDate = new Date();
+
+        // База данных продуктов для демонстрации
+        const foodDatabase = [
+            { name: "Яблоко", calories: 95, protein: 0.5, fat: 0.3, carbs: 25, image: "apple" },
+            { name: "Бананы", calories: 105, protein: 1.3, fat: 0.4, carbs: 27, image: "banana" },
+            { name: "Куриная грудка", calories: 165, protein: 31, fat: 3.6, carbs: 0, image: "chicken" },
+            { name: "Салат Цезарь", calories: 350, protein: 18, fat: 25, carbs: 12, image: "salad" },
+            { name: "Овсяная каша", calories: 150, protein: 5, fat: 3, carbs: 27, image: "oatmeal" },
+            { name: "Пицца", calories: 285, protein: 12, fat: 10, carbs: 35, image: "pizza" },
+            { name: "Сэндвич", calories: 250, protein: 10, fat: 8, carbs: 35, image: "sandwich" },
+            { name: "Кофе с молоком", calories: 30, protein: 2, fat: 1, carbs: 4, image: "coffee" },
+            { name: "Яичница", calories: 180, protein: 12, fat: 14, carbs: 1, image: "eggs" },
+            { name: "Йогурт", calories: 150, protein: 5, fat: 4, carbs: 25, image: "yogurt" }
         ];
-        
-        // Использованные промокоды (храним в localStorage)
-        let usedPromoCodes = [];
-        
-        // Символы для барабанов
-        const symbols = ['🍒', '⭐', '🚀', '💎', '👑', '🔔', '🍋', '7️⃣'];
-        
-        // Элементы DOM
-        const balanceElement = document.getElementById('balanceValue');
-        const balanceDisplay = document.getElementById('balanceDisplay');
-        const betElement = document.getElementById('betValue');
-        const winElement = document.getElementById('winValue');
-        const spinBtn = document.getElementById('spinBtn');
-        const autoSpinBtn = document.getElementById('autoSpinBtn');
-        const gameMessage = document.getElementById('gameMessage');
-        const historyList = document.getElementById('historyList');
-        const betInput = document.getElementById('betInput');
-        const maxBetBtn = document.getElementById('maxBetBtn');
-        const reels = [
-            document.getElementById('reel1'),
-            document.getElementById('reel2'),
-            document.getElementById('reel3')
-        ];
-        
-        // Элементы профиля
-        const profileCard = document.getElementById('profileCard');
-        const userName = document.getElementById('userName');
-        const userId = document.getElementById('userId');
-        const avatarPlaceholder = document.getElementById('avatarPlaceholder');
-        const avatarImage = document.getElementById('avatarImage');
-        
-        // Элементы статистики в профиле
-        const totalGamesElement = document.getElementById('totalGames');
-        const totalWinsElement = document.getElementById('totalWins');
-        
-        // Элементы пополнения
-        const promoInput = document.getElementById('promoInput');
-        const applyPromoBtn = document.getElementById('applyPromoBtn');
-        const promoList = document.getElementById('promoList');
-        const depositHistoryList = document.getElementById('depositHistoryList');
-        
-        // Элементы навигации
-        const gameSection = document.getElementById('gameSection');
-        const depositSection = document.getElementById('depositSection');
-        const helpSection = document.getElementById('helpSection');
-        const statsSection = document.getElementById('statsSection');
-        const navItems = document.querySelectorAll('.nav-item');
-        
-        // Элементы статистики
-        const totalGamesStat = document.getElementById('totalGamesStat');
-        const totalWinsStat = document.getElementById('totalWinsStat');
-        const totalLossesStat = document.getElementById('totalLossesStat');
-        const totalWinAmountElement = document.getElementById('totalWinAmount');
-        const maxWinElement = document.getElementById('maxWin');
-        const winRateElement = document.getElementById('winRate');
-        const usedPromoCodesElement = document.getElementById('usedPromoCodes');
-        const resetStatsBtn = document.getElementById('resetStatsBtn');
-        
-        // Уведомление
-        const notification = document.getElementById('notification');
-        const notificationIcon = document.getElementById('notificationIcon');
-        const notificationText = document.getElementById('notificationText');
-        
-        // Ключи для localStorage
-        const STORAGE_KEYS = {
-            BALANCE: 'rocket_casino_balance',
-            STATS: 'rocket_casino_stats',
-            HISTORY: 'rocket_casino_history',
-            DEPOSIT_HISTORY: 'rocket_casino_deposit_history',
-            USED_PROMOCODES: 'rocket_casino_used_promocodes'
-        };
-        
-        // Показать уведомление
-        function showNotification(message, type = 'success') {
-            notificationText.textContent = message;
+
+        // Инициализация приложения при загрузке
+        document.addEventListener('DOMContentLoaded', function() {
+            // Загрузка данных из localStorage
+            loadAppData();
             
-            if (type === 'error') {
-                notificationIcon.textContent = '❌';
-                notification.classList.remove('warning');
-                notification.classList.add('error');
-            } else if (type === 'warning') {
-                notificationIcon.textContent = '⚠️';
-                notification.classList.remove('error');
-                notification.classList.add('warning');
-            } else {
-                notificationIcon.textContent = '✅';
-                notification.classList.remove('error', 'warning');
-            }
+            // Настройка навигации
+            setupNavigation();
             
-            notification.classList.add('show');
+            // Настройка сканирования
+            setupScanning();
             
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, 3000);
-        }
-        
-        // Инициализация Telegram Web App
-        function initTelegramApp() {
-            // Проверяем, запущено ли приложение в Telegram
-            if (window.Telegram && Telegram.WebApp) {
-                console.log('Telegram Web App инициализирован');
-                
-                // Расширяем приложение на весь экран
-                Telegram.WebApp.expand();
-                
-                // Получаем данные пользователя
-                const user = Telegram.WebApp.initDataUnsafe.user;
-                
-                if (user) {
-                    userData = user;
-                    
-                    // Отображаем информацию о пользователе
-                    const fullName = `${user.first_name || ''} ${user.last_name || ''}`.trim();
-                    userName.textContent = fullName || 'Анонимный игрок';
-                    userId.textContent = user.id || '000000';
-                    
-                    // Устанавливаем аватар
-                    if (user.photo_url) {
-                        avatarImage.src = user.photo_url;
-                        avatarImage.style.display = 'block';
-                        avatarPlaceholder.style.display = 'none';
-                    } else {
-                        // Используем первую букву имени или никнейма
-                        let initial = 'U';
-                        if (user.username) {
-                            initial = user.username.charAt(0).toUpperCase();
-                        } else if (user.first_name) {
-                            initial = user.first_name.charAt(0).toUpperCase();
-                        }
-                        avatarPlaceholder.textContent = initial;
-                    }
-                    
-                    // Загружаем данные пользователя из localStorage с привязкой к ID
-                    loadUserData(user.id);
-                    
-                    // Показываем информацию о пользователе
-                    profileCard.classList.add('fade-in');
-                    
-                    // Настраиваем тему Telegram
-                    applyTelegramTheme();
-                } else {
-                    // Если данные пользователя недоступны, используем локальное хранилище
-                    console.log('Данные пользователя недоступны, используем локальное хранилище');
-                    userName.textContent = 'Локальный игрок';
-                    userId.textContent = 'local';
-                    loadUserData('local_user');
-                }
-                
-                // Обработчик нажатия на основную кнопку (если нужно)
-                Telegram.WebApp.MainButton.setText("Играть снова");
-                Telegram.WebApp.MainButton.hide();
-                
-                // Обработчик изменения темы
-                Telegram.WebApp.onEvent('themeChanged', applyTelegramTheme);
-                
-            } else {
-                // Если приложение запущено не в Telegram, используем локальное хранилище
-                console.log('Приложение запущено не в Telegram');
-                userName.textContent = 'Локальный игрок';
-                userId.textContent = 'local';
-                avatarPlaceholder.textContent = 'L';
-                loadUserData('local_user');
-            }
-        }
-        
-        // Применение темы Telegram
-        function applyTelegramTheme() {
-            if (!Telegram.WebApp) return;
+            // Настройка дневника
+            setupDiary();
             
-            const themeParams = Telegram.WebApp.themeParams;
-            const bgColor = themeParams.bg_color || '#0a1931';
-            const textColor = themeParams.text_color || '#ffffff';
-            
-            // Применяем цвета темы
-            document.querySelector('.tg-background').style.backgroundColor = bgColor;
-            document.body.style.color = textColor;
-        }
-        
-        // Загрузка данных пользователя
-        function loadUserData(userId) {
-            try {
-                // Загружаем баланс
-                const savedBalance = localStorage.getItem(`${STORAGE_KEYS.BALANCE}_${userId}`);
-                if (savedBalance) {
-                    balance = parseInt(savedBalance);
-                    updateBalance();
-                }
-                
-                // Загружаем статистику
-                const savedStats = localStorage.getItem(`${STORAGE_KEYS.STATS}_${userId}`);
-                if (savedStats) {
-                    stats = JSON.parse(savedStats);
-                    updateProfileStats();
-                    updateStatsSection();
-                }
-                
-                // Загружаем историю игр
-                const savedHistory = localStorage.getItem(`${STORAGE_KEYS.HISTORY}_${userId}`);
-                if (savedHistory) {
-                    history = JSON.parse(savedHistory);
-                    updateHistory();
-                }
-                
-                // Загружаем историю пополнений
-                const savedDepositHistory = localStorage.getItem(`${STORAGE_KEYS.DEPOSIT_HISTORY}_${userId}`);
-                if (savedDepositHistory) {
-                    depositHistory = JSON.parse(savedDepositHistory);
-                    updateDepositHistory();
-                }
-                
-                // Загружаем использованные промокоды
-                const savedUsedPromoCodes = localStorage.getItem(`${STORAGE_KEYS.USED_PROMOCODES}_${userId}`);
-                if (savedUsedPromoCodes) {
-                    usedPromoCodes = JSON.parse(savedUsedPromoCodes);
-                }
-                
-                console.log('Данные пользователя загружены');
-            } catch (error) {
-                console.error('Ошибка при загрузке данных:', error);
-            }
-        }
-        
-        // Сохранение данных пользователя
-        function saveUserData(userId) {
-            try {
-                // Сохраняем баланс
-                localStorage.setItem(`${STORAGE_KEYS.BALANCE}_${userId}`, balance.toString());
-                
-                // Сохраняем статистику
-                localStorage.setItem(`${STORAGE_KEYS.STATS}_${userId}`, JSON.stringify(stats));
-                
-                // Сохраняем историю игр (только последние 20 записей)
-                const historyToSave = history.slice(0, 20);
-                localStorage.setItem(`${STORAGE_KEYS.HISTORY}_${userId}`, JSON.stringify(historyToSave));
-                
-                // Сохраняем историю пополнений (только последние 10 записей)
-                const depositHistoryToSave = depositHistory.slice(0, 10);
-                localStorage.setItem(`${STORAGE_KEYS.DEPOSIT_HISTORY}_${userId}`, JSON.stringify(depositHistoryToSave));
-                
-                // Сохраняем использованные промокоды
-                localStorage.setItem(`${STORAGE_KEYS.USED_PROMOCODES}_${userId}`, JSON.stringify(usedPromoCodes));
-                
-                console.log('Данные пользователя сохранены');
-            } catch (error) {
-                console.error('Ошибка при сохранении данных:', error);
-            }
-        }
-        
-        // Обновление баланса
-        function updateBalance() {
-            balanceElement.textContent = balance;
-            balanceDisplay.textContent = balance;
-            
-            // Обновляем максимальную ставку в поле ввода
-            betInput.max = balance;
-            
-            // Сохраняем данные
-            if (userData && userData.id) {
-                saveUserData(userData.id);
-            } else {
-                saveUserData('local_user');
-            }
-        }
-        
-        // Обновление статистики в профиле
-        function updateProfileStats() {
-            totalGamesElement.textContent = stats.totalGames;
-            totalWinsElement.textContent = stats.totalWins;
-        }
-        
-        // Обновление раздела статистики
-        function updateStatsSection() {
-            totalGamesStat.textContent = stats.totalGames;
-            totalWinsStat.textContent = stats.totalWins;
-            totalLossesStat.textContent = stats.totalLosses;
-            totalWinAmountElement.textContent = stats.totalWinAmount;
-            maxWinElement.textContent = stats.maxWin;
-            usedPromoCodesElement.textContent = stats.usedPromoCodes;
-            
-            // Рассчитываем процент побед
-            const winRate = stats.totalGames > 0 ? Math.round((stats.totalWins / stats.totalGames) * 100) : 0;
-            winRateElement.textContent = `${winRate}%`;
-        }
-        
-        // Обновление ставки
-        function updateBet() {
-            betElement.textContent = currentBet;
-            betInput.value = currentBet;
-            
-            // Обновляем активную кнопку быстрой ставки
-            document.querySelectorAll('.quick-bet').forEach(bet => {
-                if (parseInt(bet.dataset.bet) === currentBet) {
-                    bet.classList.add('active');
-                } else {
-                    bet.classList.remove('active');
-                }
-            });
-        }
-        
-        // Обновление истории игр
-        function updateHistory() {
-            historyList.innerHTML = '';
-            
-            if (history.length === 0) {
-                historyList.innerHTML = '<div style="text-align: center; color: #aaa; padding: 10px;">История игр пуста</div>';
-                return;
-            }
-            
-            history.forEach(item => {
-                const historyElement = document.createElement('div');
-                historyElement.className = `history-item ${item.win > 0 ? 'win-item' : 'loss-item'}`;
-                
-                const time = item.time || '--:--';
-                const symbolsText = item.symbols?.join(' ') || '---';
-                const resultText = item.win > 0 ? `+${item.win}` : `-${item.bet}`;
-                
-                historyElement.innerHTML = `
-                    <span>${time}</span>
-                    <span>${symbolsText}</span>
-                    <span>${resultText}</span>
-                `;
-                
-                historyList.appendChild(historyElement);
-            });
-        }
-        
-        // Обновление истории пополнений
-        function updateDepositHistory() {
-            depositHistoryList.innerHTML = '';
-            
-            if (depositHistory.length === 0) {
-                depositHistoryList.innerHTML = '<div style="text-align: center; color: #aaa; padding: 10px;">История пополнений пуста</div>';
-                return;
-            }
-            
-            depositHistory.forEach(item => {
-                const depositElement = document.createElement('div');
-                depositElement.className = 'deposit-item deposit-success';
-                
-                const time = item.time || '--:--';
-                const promoCode = item.promoCode || '---';
-                const amount = item.amount || 0;
-                
-                depositElement.innerHTML = `
-                    <span>${time}</span>
-                    <span>${promoCode}</span>
-                    <span>+${amount}</span>
-                `;
-                
-                depositHistoryList.appendChild(depositElement);
-            });
-        }
-        
-        // Обновление списка промокодов
-        function updatePromoCodesList() {
-            promoList.innerHTML = '';
-            
-            availablePromoCodes.forEach(promo => {
-                const promoElement = document.createElement('div');
-                promoElement.className = 'promo-item';
-                
-                const isUsed = usedPromoCodes.includes(promo.code);
-                
-                promoElement.innerHTML = `
-                    <div class="promo-code">${promo.code}</div>
-                    <div class="promo-reward">+${promo.amount} кредитов</div>
-                    ${isUsed ? '<div class="promo-used">Использован</div>' : ''}
-                `;
-                
-                promoList.appendChild(promoElement);
-            });
-        }
-        
-        // Вращение барабана
-        function spinReel(reelElement) {
-            return new Promise(resolve => {
-                let spinCount = 0;
-                const maxSpins = 15 + Math.floor(Math.random() * 8);
-                
-                const spinInterval = setInterval(() => {
-                    const randomSymbol = symbols[Math.floor(Math.random() * symbols.length)];
-                    reelElement.querySelector('.reel-content').textContent = randomSymbol;
-                    
-                    spinCount++;
-                    if (spinCount >= maxSpins) {
-                        clearInterval(spinInterval);
-                        resolve();
-                    }
-                }, 60);
-            });
-        }
-        
-        // Определение выигрыша
-        function calculateWin(symbols) {
-            const [s1, s2, s3] = symbols;
-            
-            // Проверка на джекпот (3 ракетки)
-            if (s1 === '🚀' && s2 === '🚀' && s3 === '🚀') {
-                return {multiplier: 100, message: "🎉 ДЖЕКПОТ! 3 РАКЕТКИ!"};
-            }
-            
-            // Проверка на 3 звезды
-            if (s1 === '⭐' && s2 === '⭐' && s3 === '⭐') {
-                return {multiplier: 50, message: "Отлично! 3 звезды!"};
-            }
-            
-            // Проверка на 3 алмаза
-            if (s1 === '💎' && s2 === '💎' && s3 === '💎') {
-                return {multiplier: 30, message: "Бриллиантовая удача! 💎💎💎"};
-            }
-            
-            // Проверка на 3 короны
-            if (s1 === '👑' && s2 === '👑' && s3 === '👑') {
-                return {multiplier: 20, message: "Королевская комбинация! 👑👑👑"};
-            }
-            
-            // Проверка на 3 вишни
-            if (s1 === '🍒' && s2 === '🍒' && s3 === '🍒') {
-                return {multiplier: 20, message: "Отличная комбинация! 3 вишни!"};
-            }
-            
-            // Проверка на любые 3 одинаковых символа
-            if (s1 === s2 && s2 === s3) {
-                return {multiplier: 10, message: "3 одинаковых символа!"};
-            }
-            
-            // Проверка на 2 одинаковых символа
-            if (s1 === s2 || s2 === s3 || s1 === s3) {
-                return {multiplier: 2, message: "2 одинаковых символа!"};
-            }
-            
-            // Проигрыш
-            return {multiplier: 0, message: "Попробуйте еще раз!"};
-        }
-        
-        // Основная функция вращения
-        async function spin() {
-            if (isSpinning) return;
-            
-            // Проверка баланса
-            if (balance < currentBet) {
-                gameMessage.textContent = "Недостаточно средств!";
-                gameMessage.style.color = "#ff3838";
-                showNotification("Недостаточно средств на балансе!", "error");
-                return;
-            }
-            
-            // Проверка минимальной ставки
-            if (currentBet < 1) {
-                gameMessage.textContent = "Минимальная ставка: 1";
-                gameMessage.style.color = "#ff3838";
-                return;
-            }
-            
-            isSpinning = true;
-            balance -= currentBet;
-            updateBalance();
-            
-            // Добавляем класс вращения
-            reels.forEach(reel => {
-                reel.classList.add('spinning');
-            });
-            
-            // Вращение каждого барабана
-            const finalSymbols = [];
-            
-            for (let i = 0; i < reels.length; i++) {
-                await spinReel(reels[i]);
-                
-                // Определение финального символа для барабана
-                const randomSymbol = symbols[Math.floor(Math.random() * symbols.length)];
-                reels[i].querySelector('.reel-content').textContent = randomSymbol;
-                finalSymbols.push(randomSymbol);
-                
-                // Небольшая пауза между барабанами для эффекта
-                if (i < reels.length - 1) {
-                    await new Promise(resolve => setTimeout(resolve, 150));
-                }
-            }
-            
-            // Убираем класс вращения
-            reels.forEach(reel => {
-                reel.classList.remove('spinning');
-            });
-            
-            // Эффект остановки
-            reels.forEach((reel, index) => {
-                setTimeout(() => {
-                    reel.style.transform = 'scale(1.1)';
-                    setTimeout(() => {
-                        reel.style.transform = 'scale(1)';
-                    }, 100);
-                }, index * 50);
-            });
-            
-            // Расчет выигрыша
-            const winResult = calculateWin(finalSymbols);
-            const winAmount = currentBet * winResult.multiplier;
-            
-            // Обновление статистики
-            stats.totalGames++;
-            
-            if (winAmount > 0) {
-                balance += winAmount;
-                lastWin = winAmount;
-                stats.totalWins++;
-                stats.totalWinAmount += winAmount;
-                
-                // Обновляем максимальный выигрыш
-                if (winAmount > stats.maxWin) {
-                    stats.maxWin = winAmount;
-                }
-                
-                gameMessage.textContent = winResult.message + ` Выигрыш: ${winAmount}!`;
-                gameMessage.style.color = "#4cd137";
-                
-                // Анимация выигрыша
-                reels.forEach(reel => {
-                    reel.classList.add('win');
-                });
-                
-                // Показываем уведомление о выигрыше
-                showNotification(`Поздравляем! Вы выиграли ${winAmount} кредитов!`);
-                
-                setTimeout(() => {
-                    reels.forEach(reel => {
-                        reel.classList.remove('win');
-                    });
-                }, 1500);
-            } else {
-                lastWin = 0;
-                stats.totalLosses++;
-                gameMessage.textContent = winResult.message;
-                gameMessage.style.color = "#ff9f1a";
-            }
+            // Настройка профиля
+            setupProfile();
             
             // Обновление интерфейса
-            winElement.textContent = lastWin;
-            updateProfileStats();
-            updateStatsSection();
+            updateUI();
             
-            // Добавление в историю
+            // Инициализация истории
+            initHistory();
+        });
+
+        // Настройка навигации
+        function setupNavigation() {
+            const tabs = document.querySelectorAll('.nav-tab');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+                    
+                    // Обновление активной вкладки
+                    tabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    document.querySelectorAll('.tab-content').forEach(content => {
+                        content.classList.remove('active');
+                    });
+                    
+                    document.getElementById(tabId).classList.add('active');
+                    currentTab = tabId;
+                });
+            });
+        }
+
+        // Настройка сканирования
+        function setupScanning() {
+            const scanButton = document.getElementById('scan-button');
+            const fileInput = document.getElementById('file-input');
+            const analyzeButton = document.getElementById('analyze-button');
+            const previewContainer = document.getElementById('preview-container');
+            const previewImage = document.getElementById('preview-image');
+            const resultContainer = document.getElementById('result-container');
+            const resultClose = document.getElementById('result-close');
+            const addToDiaryButton = document.getElementById('add-to-diary-button');
+            
+            // Открытие камеры/галереи
+            scanButton.addEventListener('click', function() {
+                fileInput.click();
+            });
+            
+            // Выбор файла
+            fileInput.addEventListener('change', function(e) {
+                if (e.target.files && e.target.files[0]) {
+                    const file = e.target.files[0];
+                    const reader = new FileReader();
+                    
+                    reader.onload = function(event) {
+                        previewImage.src = event.target.result;
+                        previewContainer.classList.add('active');
+                        analyzeButton.classList.add('active');
+                    };
+                    
+                    reader.readAsDataURL(file);
+                }
+            });
+            
+            // Анализ фото
+            analyzeButton.addEventListener('click', function() {
+                analyzeFood();
+            });
+            
+            // Закрытие результатов
+            resultClose.addEventListener('click', function() {
+                resultContainer.classList.remove('active');
+            });
+            
+            // Добавление в дневник
+            addToDiaryButton.addEventListener('click', function() {
+                addToDiary();
+            });
+        }
+
+        // Анализ еды (демо-режим)
+        function analyzeFood() {
+            const loading = document.getElementById('analyze-loading');
+            const analyzeButton = document.getElementById('analyze-button');
+            const resultContainer = document.getElementById('result-container');
+            
+            // Показать индикатор загрузки
+            loading.style.display = 'inline-block';
+            analyzeButton.disabled = true;
+            analyzeButton.innerHTML = '<span class="loading" id="analyze-loading"></span> Анализируем...';
+            
+            // Имитация анализа (в реальном приложении здесь был бы запрос к API)
+            setTimeout(() => {
+                // Выбрать случайный продукт из базы
+                const randomFood = foodDatabase[Math.floor(Math.random() * foodDatabase.length)];
+                
+                // Обновить UI с результатами
+                document.getElementById('food-name').textContent = randomFood.name;
+                document.getElementById('calorie-value').textContent = randomFood.calories + ' ккал';
+                document.getElementById('protein-value').textContent = randomFood.protein + 'г';
+                document.getElementById('fat-value').textContent = randomFood.fat + 'г';
+                document.getElementById('carbs-value').textContent = randomFood.carbs + 'г';
+                
+                // Сохранить текущий результат анализа
+                window.currentFoodResult = randomFood;
+                
+                // Скрыть индикатор загрузки
+                loading.style.display = 'none';
+                analyzeButton.disabled = false;
+                analyzeButton.innerHTML = 'Анализировать фото';
+                
+                // Показать результаты
+                resultContainer.classList.add('active');
+                
+                // Добавить в историю
+                addToHistory(randomFood);
+                
+                // Показать уведомление
+                showNotification('Анализ завершен!');
+            }, 2000);
+        }
+
+        // Добавление в историю
+        function addToHistory(food) {
             const historyItem = {
-                symbols: [...finalSymbols],
-                win: winAmount,
-                bet: currentBet,
-                time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+                ...food,
+                date: new Date().toLocaleString('ru-RU', { 
+                    day: 'numeric', 
+                    month: 'long',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                }),
+                timestamp: new Date().getTime()
             };
             
             history.unshift(historyItem);
-            if (history.length > 20) history.pop();
+            if (history.length > 5) history = history.slice(0, 5);
             
-            // Обновление истории на экране
-            updateHistory();
-            
-            isSpinning = false;
-            
-            // Если включен автоспин, запускаем следующий спин
-            if (autoSpin && balance >= currentBet) {
-                setTimeout(spin, 1000);
-            } else if (autoSpin && balance < currentBet) {
-                toggleAutoSpin();
-                gameMessage.textContent = "Автоспин остановлен: недостаточно средств!";
-                gameMessage.style.color = "#ff3838";
-                showNotification("Автоспин остановлен: недостаточно средств!", "warning");
-            }
+            updateHistoryUI();
+            saveAppData();
         }
-        
-        // Переключение автоспина
-        function toggleAutoSpin() {
-            autoSpin = !autoSpin;
+
+        // Обновление истории на UI
+        function updateHistoryUI() {
+            const historyList = document.getElementById('history-list');
             
-            if (autoSpin) {
-                autoSpinBtn.innerHTML = '<i class="fas fa-stop"></i> Стоп автоспин';
-                autoSpinBtn.style.background = 'linear-gradient(to right, #e84118, #ff3838)';
+            if (history.length === 0) {
+                historyList.innerHTML = '<div class="empty-state" style="text-align: center; color: var(--text-secondary); padding: 20px;">История сканирований пуста</div>';
+                return;
+            }
+            
+            historyList.innerHTML = '';
+            
+            history.forEach(item => {
+                const historyItem = document.createElement('div');
+                historyItem.className = 'history-item';
+                historyItem.innerHTML = `
+                    <div class="history-image" style="background: linear-gradient(135deg, var(--primary-light), var(--primary)); display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem;">
+                        <i class="fas fa-${item.image || 'apple-alt'}"></i>
+                    </div>
+                    <div class="history-info">
+                        <div class="history-food">${item.name}</div>
+                        <div class="history-calories">${item.calories} ккал</div>
+                        <div class="history-date">${item.date}</div>
+                    </div>
+                `;
                 
-                // Запуск спина, если не вращается в данный момент
-                if (!isSpinning && balance >= currentBet) {
-                    spin();
-                }
-            } else {
-                autoSpinBtn.innerHTML = '<i class="fas fa-sync-alt"></i> Авто-спин';
-                autoSpinBtn.style.background = 'linear-gradient(to right, #3c40c6, #575fcf)';
+                historyList.appendChild(historyItem);
+            });
+        }
+
+        // Инициализация истории
+        function initHistory() {
+            // Добавим несколько демонстрационных записей в историю
+            if (history.length === 0) {
+                const demoItems = [
+                    { name: "Овсяная каша", calories: 150, protein: 5, fat: 3, carbs: 27, image: "oatmeal", date: "Сегодня, 10:30", timestamp: new Date().getTime() - 3600000 },
+                    { name: "Кофе с молоком", calories: 30, protein: 2, fat: 1, carbs: 4, image: "coffee", date: "Вчера, 16:45", timestamp: new Date().getTime() - 86400000 },
+                    { name: "Салат Цезарь", calories: 350, protein: 18, fat: 25, carbs: 12, image: "salad", date: "Вчера, 13:20", timestamp: new Date().getTime() - 90000000 }
+                ];
+                
+                history = demoItems;
+                updateHistoryUI();
             }
         }
-        
-        // Установка максимальной ставки
-        function setMaxBet() {
-            currentBet = balance;
-            updateBet();
-            betInput.value = currentBet;
-        }
-        
-        // Обработка ввода ставки
-        function handleBetInput() {
-            let value = parseInt(betInput.value);
+
+        // Добавление в дневник
+        function addToDiary() {
+            if (!window.currentFoodResult) return;
             
-            // Проверка на корректность ввода
-            if (isNaN(value) || value < 1) {
-                value = 1;
-            }
+            const food = window.currentFoodResult;
+            const meal = prompt("К какому приему пищи добавить? (завтрак, обед, ужин)", "обед").toLowerCase();
             
-            if (value > balance) {
-                value = balance;
-            }
+            let mealType;
+            if (meal.includes('завтрак')) mealType = 'breakfast';
+            else if (meal.includes('обед')) mealType = 'lunch';
+            else if (meal.includes('ужин')) mealType = 'dinner';
+            else mealType = 'lunch';
             
-            // Ограничение максимальной ставки
-            if (value > 10000) {
-                value = 10000;
-            }
-            
-            currentBet = value;
-            updateBet();
-        }
-        
-        // Активация промокода
-        function activatePromoCode() {
-            const promoCode = promoInput.value.trim().toUpperCase();
-            
-            if (!promoCode) {
-                showNotification("Введите промокод!", "warning");
-                return;
-            }
-            
-            // Проверяем, использовался ли уже этот промокод
-            if (usedPromoCodes.includes(promoCode)) {
-                showNotification("Этот промокод уже использован!", "error");
-                return;
-            }
-            
-            // Ищем промокод в списке доступных
-            const promo = availablePromoCodes.find(p => p.code === promoCode);
-            
-            if (!promo) {
-                showNotification("Неверный промокод!", "error");
-                return;
-            }
-            
-            // Активируем промокод
-            balance += promo.amount;
-            usedPromoCodes.push(promoCode);
-            stats.usedPromoCodes++;
-            
-            // Добавляем в историю пополнений
-            const depositItem = {
-                promoCode: promoCode,
-                amount: promo.amount,
-                time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+            // Добавить в дневник
+            const diaryItem = {
+                ...food,
+                id: Date.now(),
+                meal: mealType
             };
             
-            depositHistory.unshift(depositItem);
-            if (depositHistory.length > 10) depositHistory.pop();
+            if (!diary.today) diary.today = { breakfast: [], lunch: [], dinner: [] };
+            diary.today[mealType].push(diaryItem);
             
-            // Обновляем интерфейс
-            updateBalance();
-            updateStatsSection();
-            updateDepositHistory();
-            updatePromoCodesList();
+            // Обновить UI
+            updateDiaryUI();
             
-            // Показываем уведомление об успехе
-            showNotification(`Промокод активирован! +${promo.amount} кредитов`, "success");
+            // Обновить потребленные калории
+            caloriesConsumed += food.calories;
+            updateProgress();
             
-            // Очищаем поле ввода
-            promoInput.value = "";
+            // Сохранить данные
+            saveAppData();
             
-            // Анимация успеха
-            profileCard.classList.add('success-animation');
-            setTimeout(() => {
-                profileCard.classList.remove('success-animation');
-            }, 500);
+            // Показать уведомление
+            showNotification(`${food.name} добавлено в дневник!`);
+            
+            // Перейти на вкладку дневника
+            document.querySelector('.nav-tab[data-tab="diary"]').click();
         }
-        
-        // Переключение между разделами
-        function switchSection(section) {
-            // Скрываем все разделы
-            gameSection.style.display = 'none';
-            depositSection.classList.remove('active');
-            helpSection.classList.remove('active');
-            statsSection.classList.remove('active');
+
+        // Настройка дневника
+        function setupDiary() {
+            const prevDayButton = document.getElementById('prev-day');
+            const nextDayButton = document.getElementById('next-day');
+            const addButtons = document.querySelectorAll('.add-button');
             
-            // Показываем выбранный раздел
-            if (section === 'game') {
-                gameSection.style.display = 'block';
-            } else if (section === 'deposit') {
-                depositSection.classList.add('active');
-            } else if (section === 'help') {
-                helpSection.classList.add('active');
-            } else if (section === 'stats') {
-                statsSection.classList.add('active');
-            }
+            // Навигация по дням
+            prevDayButton.addEventListener('click', function() {
+                currentDate.setDate(currentDate.getDate() - 1);
+                updateDiaryDate();
+                updateDiaryUI();
+            });
             
-            // Обновляем активную кнопку навигации
-            navItems.forEach(item => {
-                if (item.dataset.section === section) {
-                    item.classList.add('active');
-                } else {
-                    item.classList.remove('active');
+            nextDayButton.addEventListener('click', function() {
+                const today = new Date();
+                if (currentDate < today) {
+                    currentDate.setDate(currentDate.getDate() + 1);
+                    updateDiaryDate();
+                    updateDiaryUI();
                 }
             });
+            
+            // Кнопки добавления продуктов
+            addButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const meal = this.getAttribute('data-meal');
+                    addManualFoodItem(meal);
+                });
+            });
+            
+            // Инициализация даты дневника
+            updateDiaryDate();
         }
-        
-        // Сброс статистики
-        function resetStats() {
-            if (confirm("Вы уверены, что хотите сбросить статистику? Это действие нельзя отменить.")) {
-                stats = {
-                    totalGames: 0,
-                    totalWins: 0,
-                    totalLosses: 0,
-                    totalWinAmount: 0,
-                    maxWin: 0,
-                    usedPromoCodes: 0
-                };
-                
-                // Также очищаем историю игр
-                history = [];
-                depositHistory = [];
-                usedPromoCodes = [];
-                
-                // Обновляем интерфейс
-                updateProfileStats();
-                updateStatsSection();
-                updateHistory();
-                updateDepositHistory();
-                updatePromoCodesList();
-                
-                showNotification("Статистика сброшена!", "success");
+
+        // Обновление даты в дневнике
+        function updateDiaryDate() {
+            const currentDateElement = document.getElementById('current-date');
+            const today = new Date();
+            
+            if (isSameDay(currentDate, today)) {
+                currentDateElement.textContent = 'Сегодня, ' + formatDate(currentDate);
+            } else if (isSameDay(currentDate, new Date(today.getTime() - 86400000))) {
+                currentDateElement.textContent = 'Вчера, ' + formatDate(currentDate);
+            } else if (isSameDay(currentDate, new Date(today.getTime() + 86400000))) {
+                currentDateElement.textContent = 'Завтра, ' + formatDate(currentDate);
+            } else {
+                currentDateElement.textContent = formatDate(currentDate);
             }
         }
-        
-        // Генерация случайного промокода (для демонстрации)
-        function generateRandomPromoCode() {
-            const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-            let result = '';
-            for (let i = 0; i < 8; i++) {
-                result += letters.charAt(Math.floor(Math.random() * letters.length));
-            }
-            return result;
+
+        // Форматирование даты
+        function formatDate(date) {
+            const day = date.getDate();
+            const month = date.toLocaleString('ru-RU', { month: 'long' });
+            return `${day} ${month}`;
         }
-        
-        // Инициализация игры
-        function initGame() {
-            // Инициализация Telegram
-            initTelegramApp();
+
+        // Проверка, один ли это день
+        function isSameDay(date1, date2) {
+            return date1.getDate() === date2.getDate() &&
+                   date1.getMonth() === date2.getMonth() &&
+                   date1.getFullYear() === date2.getFullYear();
+        }
+
+        // Обновление UI дневника
+        function updateDiaryUI() {
+            const todayDiary = diary.today || { breakfast: [], lunch: [], dinner: [] };
             
-            // Обновление интерфейса
-            updateBalance();
-            updateBet();
-            updateProfileStats();
-            updateStatsSection();
-            updateHistory();
-            updateDepositHistory();
-            updatePromoCodesList();
+            // Обновление завтрака
+            updateMealUI('breakfast', todayDiary.breakfast);
             
-            // Обработчик кнопки "Крутить"
-            spinBtn.addEventListener('click', spin);
-            spinBtn.addEventListener('touchstart', function(e) {
-                e.preventDefault();
-                spin();
-            }, {passive: false});
+            // Обновление обеда
+            updateMealUI('lunch', todayDiary.lunch);
             
-            // Обработчик кнопки "Автоспин"
-            autoSpinBtn.addEventListener('click', toggleAutoSpin);
-            autoSpinBtn.addEventListener('touchstart', function(e) {
-                e.preventDefault();
-                toggleAutoSpin();
-            }, {passive: false});
+            // Обновление ужина
+            updateMealUI('dinner', todayDiary.dinner);
             
-            // Обработчик поля ввода ставки
-            betInput.addEventListener('input', handleBetInput);
-            betInput.addEventListener('change', handleBetInput);
+            // Обновление итогов
+            updateDiarySummary();
+        }
+
+        // Обновление UI приема пищи
+        function updateMealUI(mealType, items) {
+            const mealContainer = document.getElementById(`${mealType}-items`);
+            const mealCaloriesElement = document.getElementById(`${mealType}-calories`);
             
-            // Обработчик кнопки "MAX"
-            maxBetBtn.addEventListener('click', setMaxBet);
-            maxBetBtn.addEventListener('touchstart', function(e) {
-                e.preventDefault();
-                setMaxBet();
-            }, {passive: false});
+            // Рассчитать калории
+            const totalCalories = items.reduce((sum, item) => sum + item.calories, 0);
+            mealCaloriesElement.textContent = totalCalories + ' ккал';
             
-            // Обработчики быстрых ставок
-            document.querySelectorAll('.quick-bet').forEach(bet => {
-                bet.addEventListener('click', function() {
-                    if (isSpinning) return;
+            // Обновить список продуктов
+            if (items.length === 0) {
+                mealContainer.innerHTML = '<div class="empty-state" style="text-align: center; color: var(--text-secondary); padding: 20px;">Нет продуктов. Добавьте что-нибудь!</div>';
+                return;
+            }
+            
+            mealContainer.innerHTML = '';
+            items.forEach(item => {
+                const mealItem = document.createElement('div');
+                mealItem.className = 'meal-item';
+                mealItem.innerHTML = `
+                    <div class="meal-item-info">
+                        <div class="meal-item-name">${item.name}</div>
+                        <div class="meal-item-details">Б:${item.protein}г, Ж:${item.fat}г, У:${item.carbs}г</div>
+                    </div>
+                    <div class="meal-item-calories">${item.calories} ккал</div>
+                `;
+                
+                mealContainer.appendChild(mealItem);
+            });
+        }
+
+        // Обновление итогов дневника
+        function updateDiarySummary() {
+            const todayDiary = diary.today || { breakfast: [], lunch: [], dinner: [] };
+            
+            const breakfastCalories = todayDiary.breakfast.reduce((sum, item) => sum + item.calories, 0);
+            const lunchCalories = todayDiary.lunch.reduce((sum, item) => sum + item.calories, 0);
+            const dinnerCalories = todayDiary.dinner.reduce((sum, item) => sum + item.calories, 0);
+            
+            const totalCalories = breakfastCalories + lunchCalories + dinnerCalories;
+            
+            document.getElementById('diary-total').textContent = totalCalories + ' ккал';
+            document.getElementById('total-calories').textContent = totalCalories + ' ккал';
+            
+            const remaining = Math.max(0, dailyCalorieGoal - totalCalories);
+            document.getElementById('remaining-value').textContent = remaining;
+            
+            // Обновить глобальные потребленные калории
+            caloriesConsumed = totalCalories;
+            updateProgress();
+        }
+
+        // Добавление продукта вручную
+        function addManualFoodItem(mealType) {
+            const foodName = prompt("Введите название продукта:", "Яблоко");
+            if (!foodName) return;
+            
+            const calories = parseInt(prompt("Введите калорийность (на 100г/порцию):", "95")) || 0;
+            const protein = parseInt(prompt("Введите количество белков (г):", "0.5")) || 0;
+            const fat = parseInt(prompt("Введите количество жиров (г):", "0.3")) || 0;
+            const carbs = parseInt(prompt("Введите количество углеводов (г):", "25")) || 0;
+            
+            const foodItem = {
+                id: Date.now(),
+                name: foodName,
+                calories: calories,
+                protein: protein,
+                fat: fat,
+                carbs: carbs,
+                meal: mealType
+            };
+            
+            if (!diary.today) diary.today = { breakfast: [], lunch: [], dinner: [] };
+            diary.today[mealType].push(foodItem);
+            
+            updateDiaryUI();
+            saveAppData();
+            
+            showNotification(`${foodName} добавлено в ${getMealName(mealType)}!`);
+        }
+
+        // Получение названия приема пищи
+        function getMealName(mealType) {
+            switch(mealType) {
+                case 'breakfast': return 'завтрак';
+                case 'lunch': return 'обед';
+                case 'dinner': return 'ужин';
+                default: return 'дневник';
+            }
+        }
+
+        // Настройка профиля
+        function setupProfile() {
+            const saveButton = document.getElementById('save-profile-button');
+            
+            saveButton.addEventListener('click', function() {
+                saveProfile();
+            });
+            
+            // Рассчитать норму калорий при изменении данных
+            const profileInputs = document.querySelectorAll('#profile .form-input, #profile .form-select, #profile .radio-input');
+            profileInputs.forEach(input => {
+                input.addEventListener('change', function() {
+                    calculateCalorieNorm();
+                });
+            });
+            
+            // Инициализация расчета нормы
+            calculateCalorieNorm();
+        }
+
+        // Сохранение профиля
+        function saveProfile() {
+            const name = document.getElementById('name-input').value;
+            const age = parseInt(document.getElementById('age-input').value) || 30;
+            const gender = document.getElementById('gender-select').value;
+            const height = parseInt(document.getElementById('height-input').value) || 180;
+            const weight = parseInt(document.getElementById('weight-input').value) || 80;
+            
+            // Получение цели
+            const goalRadios = document.getElementsByName('goal');
+            let goal = 'loss';
+            for (const radio of goalRadios) {
+                if (radio.checked) {
+                    goal = radio.value;
+                    break;
+                }
+            }
+            
+            const activity = parseFloat(document.getElementById('activity-select').value) || 1.55;
+            
+            // Обновление UI профиля
+            document.getElementById('profile-name').textContent = name;
+            document.getElementById('profile-goal').textContent = `Цель: ${getGoalText(goal)}`;
+            
+            // Сохранение данных
+            saveAppData();
+            
+            // Показать уведомление
+            showNotification('Профиль успешно сохранен!');
+        }
+
+        // Получение текста цели
+        function getGoalText(goal) {
+            switch(goal) {
+                case 'loss': return 'Похудение';
+                case 'maintain': return 'Поддержание веса';
+                case 'gain': return 'Набор массы';
+                default: return 'Похудение';
+            }
+        }
+
+        // Расчет нормы калорий
+        function calculateCalorieNorm() {
+            const age = parseInt(document.getElementById('age-input').value) || 30;
+            const gender = document.getElementById('gender-select').value;
+            const height = parseInt(document.getElementById('height-input').value) || 180;
+            const weight = parseInt(document.getElementById('weight-input').value) || 80;
+            const activity = parseFloat(document.getElementById('activity-select').value) || 1.55;
+            
+            // Формула Миффлина-Сан Жеора
+            let bmr;
+            if (gender === 'male') {
+                bmr = 10 * weight + 6.25 * height - 5 * age + 5;
+            } else {
+                bmr = 10 * weight + 6.25 * height - 5 * age - 161;
+            }
+            
+            // Учет активности
+            let tdee = bmr * activity;
+            
+            // Учет цели
+            const goalRadios = document.getElementsByName('goal');
+            let goal = 'loss';
+            for (const radio of goalRadios) {
+                if (radio.checked) {
+                    goal = radio.value;
+                    break;
+                }
+            }
+            
+            if (goal === 'loss') {
+                tdee -= 500; // Дефицит для похудения
+            } else if (goal === 'gain') {
+                tdee += 500; // Профицит для набора массы
+            }
+            
+            // Обновление UI
+            const calorieNorm = Math.round(tdee);
+            document.getElementById('calorie-norm-value').textContent = calorieNorm + ' ккал';
+            
+            // Обновление дневной цели
+            dailyCalorieGoal = calorieNorm;
+            document.getElementById('calorie-goal').textContent = calorieNorm;
+            
+            // Обновление прогресса
+            updateProgress();
+            
+            return calorieNorm;
+        }
+
+        // Обновление прогресса
+        function updateProgress() {
+            const progressPercentage = Math.min(100, Math.round((caloriesConsumed / dailyCalorieGoal) * 100));
+            
+            // Обновление значений
+            document.getElementById('calories-consumed').textContent = caloriesConsumed;
+            document.getElementById('calorie-goal').textContent = dailyCalorieGoal;
+            document.getElementById('progress-percentage').textContent = progressPercentage + '%';
+            
+            // Обновление кругового прогресса
+            const circle = document.getElementById('progress-circle-fill');
+            const circumference = 472; // 2 * π * r (r = 75)
+            const offset = circumference - (progressPercentage / 100) * circumference;
+            circle.style.strokeDashoffset = offset;
+        }
+
+        // Показать уведомление
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            const notificationText = document.getElementById('notification-text');
+            
+            notificationText.textContent = message;
+            notification.style.display = 'flex';
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+
+        // Сохранение данных приложения
+        function saveAppData() {
+            const appData = {
+                history: history,
+                diary: diary,
+                caloriesConsumed: caloriesConsumed,
+                dailyCalorieGoal: dailyCalorieGoal,
+                profile: {
+                    name: document.getElementById('name-input').value,
+                    age: parseInt(document.getElementById('age-input').value) || 30,
+                    gender: document.getElementById('gender-select').value,
+                    height: parseInt(document.getElementById('height-input').value) || 180,
+                    weight: parseInt(document.getElementById('weight-input').value) || 80,
+                    activity: parseFloat(document.getElementById('activity-select').value) || 1.55,
+                    goal: document.querySelector('input[name="goal"]:checked').value
+                }
+            };
+            
+            localStorage.setItem('kaloriesnap-data', JSON.stringify(appData));
+        }
+
+        // Загрузка данных приложения
+        function loadAppData() {
+            const savedData = localStorage.getItem('kaloriesnap-data');
+            
+            if (savedData) {
+                const appData = JSON.parse(savedData);
+                
+                history = appData.history || [];
+                diary = appData.diary || { today: { breakfast: [], lunch: [], dinner: [] } };
+                caloriesConsumed = appData.caloriesConsumed || 0;
+                dailyCalorieGoal = appData.dailyCalorieGoal || 2000;
+                
+                // Загрузка профиля
+                if (appData.profile) {
+                    document.getElementById('name-input').value = appData.profile.name || 'Иван';
+                    document.getElementById('age-input').value = appData.profile.age || 30;
+                    document.getElementById('gender-select').value = appData.profile.gender || 'male';
+                    document.getElementById('height-input').value = appData.profile.height || 180;
+                    document.getElementById('weight-input').value = appData.profile.weight || 80;
+                    document.getElementById('activity-select').value = appData.profile.activity || 1.55;
                     
-                    currentBet = parseInt(this.dataset.bet);
-                    updateBet();
-                });
-                
-                bet.addEventListener('touchstart', function(e) {
-                    e.preventDefault();
-                    if (isSpinning) return;
+                    const goal = appData.profile.goal || 'loss';
+                    document.querySelector(`input[name="goal"][value="${goal}"]`).checked = true;
                     
-                    currentBet = parseInt(this.dataset.bet);
-                    updateBet();
-                }, {passive: false});
-            });
-            
-            // Обработчики промокодов
-            applyPromoBtn.addEventListener('click', activatePromoCode);
-            promoInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    activatePromoCode();
+                    // Обновление UI профиля
+                    document.getElementById('profile-name').textContent = appData.profile.name || 'Иван';
+                    document.getElementById('profile-goal').textContent = `Цель: ${getGoalText(goal)}`;
                 }
-            });
-            
-            // Обработчики навигации
-            navItems.forEach(item => {
-                item.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const section = this.dataset.section;
-                    switchSection(section);
-                });
                 
-                item.addEventListener('touchstart', function(e) {
-                    e.preventDefault();
-                    const section = this.dataset.section;
-                    switchSection(section);
-                }, {passive: false});
-            });
-            
-            // Обработчик кнопки сброса статистики
-            resetStatsBtn.addEventListener('click', resetStats);
-            
-            // Добавление анимации к барабанам при загрузке
-            setTimeout(() => {
-                reels.forEach(reel => {
-                    reel.style.transform = 'scale(1.1)';
-                    reel.style.transition = 'transform 0.3s';
-                });
-                
-                setTimeout(() => {
-                    reels.forEach(reel => {
-                        reel.style.transform = 'scale(1)';
-                    });
-                }, 300);
-            }, 500);
-            
-            // Обработка изменения ориентации экрана
-            window.addEventListener('orientationchange', function() {
-                setTimeout(() => {
-                    updateBalance();
-                }, 300);
-            });
-            
-            // Предотвращение контекстного меню на кнопках
-            document.addEventListener('contextmenu', function(e) {
-                if (e.target.classList.contains('btn') || 
-                    e.target.classList.contains('quick-bet') ||
-                    e.target.classList.contains('nav-item') ||
-                    e.target.classList.contains('reel')) {
-                    e.preventDefault();
-                }
-            });
-            
-            // Обработка видимости страницы для автоспина
-            document.addEventListener('visibilitychange', function() {
-                if (document.hidden && autoSpin) {
-                    toggleAutoSpin();
-                    gameMessage.textContent = "Автоспин приостановлен (страница неактивна)";
-                    gameMessage.style.color = "#ff9f1a";
-                }
-            });
-            
-            // Показываем приветственное сообщение
-            setTimeout(() => {
-                showNotification("Добро пожаловать в Казино 'Ракетка'! Используйте промокоды для пополнения баланса.", "success");
-            }, 1000);
+                updateHistoryUI();
+                updateDiaryUI();
+            }
         }
-        
-        // Запуск игры при загрузке страницы
-        window.addEventListener('DOMContentLoaded', initGame);
+
+        // Обновление всего UI
+        function updateUI() {
+            updateProgress();
+            updateHistoryUI();
+            updateDiaryUI();
+        }
     </script>
 </body>
 </html>
